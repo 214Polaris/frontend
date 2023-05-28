@@ -1,0 +1,12 @@
+{
+  "folders": [
+    {
+      "name": "go_server",
+      "path": "../server"
+    },
+    {
+      "name": "External Libraries",
+      "path": "../server/system/go.mod"
+    }
+  ]
+}
