@@ -7,13 +7,6 @@
     @touchstart="stopInv()"
     @touchend="runInv()"
   >
-    <header>
-      <input type="text" v-model="searchQuery" placeholder="搜索商品" />
-      <button class="button" @click="search">搜索</button>
-      <button class="button" @click="login">
-        <router-link to="/login">登录</router-link>
-      </button>
-    </header>
     <!--滚动图片，后面在这里添加点击跳转-->
     <div class="item">
       <img :src="dataList[currentIndex]" />
@@ -33,7 +26,7 @@
         <li @click="gotoPage(nextIndex)">&gt;</li>
       </ul>
     </div>
-    <!--显示商品-->
+    <!--后端拉取显示商品，尚未实现-->
     <div class="product-list">
       <div v-for="product in products" :key="product.id" class="product">
         <img :src="product.image" :alt="product.introduce" />
@@ -49,7 +42,6 @@
 <script>
 import axios from 'axios'
 import Recommend from './childHome/Recommend.vue'
-import { ElMessageBox } from 'element-plus'
 export default {
   data () {
     return {
@@ -91,10 +83,6 @@ export default {
     }
   },
   methods: {
-    //跳转到登录页面
-    login () {
-      this.$router.replace({ name: 'login' })
-    },
     // 定时滚动图片
     stopInv () {
       clearInterval(this.timer)
@@ -117,14 +105,6 @@ export default {
         .catch(error => {
           console.error(error)
         })
-    },
-    //element ui 测试
-    search () {
-      ElMessageBox.alert("当前没有连接到后端").then(()=>{
-        this.$router.replace({ name: 'login' })
-            }
-      )
-      this.$store.commit('LOGOUT')
     },
     /*
     search () {
@@ -150,16 +130,22 @@ export default {
 </script>
 
 <style scoped>
+.flex-grow {
+  flex-grow: 1;
+}
+
 * {
   margin: 0;
   padding: 0;
 }
 
 header {
+  position: relative;
+  margin-bottom: 20px;
+  margin-top: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
 }
 
 input[type="text"] {
@@ -246,9 +232,5 @@ ul li {
 
 .current {
   color: #ff6700;
-}
-
-.button {
-  margin-right: 20px;
 }
 </style>
