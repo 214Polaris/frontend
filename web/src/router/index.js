@@ -1,44 +1,51 @@
-import Login from '../views/Login_user'
-import Activity from '../components/index_test'
-import Index from '../views/home/MainPage'
-import store from '../store/index'
-import Details from '../views/home/childHome/Details/details_page'
+import Login from '../views/Login/Login_user.vue'
+import Activity from '../components/details.vue'
+import Home from '../views/home/index'
+import Details from '../views/Details/details_page'
+import Layout from '../views/Layout/index'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
-  {
-    path: '/MainPage/Details/:goodId',
-    name: 'Details',
-    meta: {
-      requireAuth: true
-    },
-    component: Details
-  },
-  {
-    path: '/',
-    name: 'MainPage',
-    component: Index
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: Login
-  },
+  //测试用路由，当连接不到后端时调用这里的路由并更改Activity来进行调试
   {
     path: '/activity',
-    name: 'activity',
-    component: Activity,
-    meta: {
-      requireAuth: true
-    }
-  }
+    name: 'Activity',
+    component: Activity
+  },
+  // Home组件，显示中心内容
+  {
+    path: '/',
+    name: 'Layout',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        component: Home
+      },
+      {
+        path: 'login',
+        name: 'login',
+        component: Login
+      },
+      {
+        path: 'Details/:goodId',
+        name: 'Details',
+        //添加路由守卫请求
+        meta: {
+          requireAuth: true
+        },
+        component: Details
+      }
+    ]
+  },
 ]
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes
 })
-// 路由拦截，要求用户登录之后才可以访问
+
+// 路由拦截，要求用户登录之后才可以访问,需要拦截的路由记得requireAuth
 router.beforeEach((to, from, next) => {
   const token = localStorage.token
   if (to.meta.requireAuth) { // 判断该路由是否需要登录权限

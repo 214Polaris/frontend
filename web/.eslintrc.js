@@ -7,7 +7,7 @@ module.exports = {
   "parser": "vue-eslint-parser",
   "extends": [
     "eslint:recommended",
-    "plugin:vue/essential",
+    "plugin:vue/vue3-recommended",
     "plugin:@typescript-eslint/recommended"
   ],
   "parserOptions": {
@@ -17,7 +17,7 @@ module.exports = {
     "requireConfigFile": false
   },
   "plugins": [
-    "vue",
+    "vue3",
     "@typescript-eslint"
   ],
   "rules": {
