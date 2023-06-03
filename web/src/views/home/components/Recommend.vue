@@ -35,7 +35,7 @@ export default {
     return {
       goodsList:null
     }
-  }
+  },
 }
 </script>
 

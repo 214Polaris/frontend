@@ -161,8 +161,7 @@ export default {
             this.$store.commit('SET_TOKEN', response.data.token)
             this.$store.commit('GET_USER', response.data.user)
             console.log("登录成功！")
-            location.reload()
-            this.$router.replace({ path:'/' })
+            this.$router.push({ path:'/' })
           }
         })
           .catch(function () {

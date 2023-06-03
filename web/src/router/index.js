@@ -1,7 +1,7 @@
 import Login from '../views/Login/Login_user.vue'
-import Activity from '../components/details.vue'
+import Activity from '../views/Details/index.vue'
 import Home from '../views/home/index'
-import Details from '../views/Details/details_page'
+import Details from '../views/Details/index.vue'
 import Layout from '../views/Layout/index'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
@@ -20,12 +20,8 @@ const routes = [
     children: [
       {
         path: '',
+        name: 'home',
         component: Home
-      },
-      {
-        path: 'login',
-        name: 'login',
-        component: Login
       },
       {
         path: 'Details/:goodId',
@@ -37,6 +33,11 @@ const routes = [
         component: Details
       }
     ]
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
   },
 ]
 

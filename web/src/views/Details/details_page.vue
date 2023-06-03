@@ -1,3 +1,4 @@
+<!--此页面留作参考，作废，请无视-->
 <template>
   <div v-if="goodsList[good_id]">
     <!-- 图片 -->

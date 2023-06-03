@@ -104,6 +104,7 @@ export default {
     logout () {
       ElMessageBox.alert("您已退出登录").then(() => {
         this.$store.commit('LOGOUT')
+        this.$router.push({ path:'/' })
       }
       )
     },
