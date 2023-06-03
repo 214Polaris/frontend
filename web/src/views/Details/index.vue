@@ -12,7 +12,11 @@
           <el-main>
             <!--商品信息组件-->
             <div class="spec">
-              <GoodsIntroduce />
+              <GoodsIntroduce
+                :GoodName="good.productName"
+                :GoodIntroduce="good.productIntro"
+                :GoodPrice="good.productPrice"
+              />
             </div>
           </el-main>
         </el-container>

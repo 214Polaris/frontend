@@ -1,17 +1,18 @@
 <!--商品信息介绍-->
 <template>
   <!--拿去商品信息后放在这里-->
-  <p class="g-name">2件装 粉釉花瓣心意点缀 点心盘*2 碟子盘子</p>
-  <p class="g-desc">花瓣造型干净简约 多功能使用堆叠方便</p>
+  <p class="g-name">{{ GoodName }}</p>
+  <p class="g-desc">{{ GoodIntroduce }}</p>
   <p class="g-price">
-    <span>108.00</span>
-    <span>199.00</span>
+    <span>{{ GoodPrice - 20 }}</span>
+    <span>{{ GoodPrice }}</span>
   </p>
   <div class="g-service">
     <dl>
       <dt>促销</dt>
-      <dd>12月好物放送，App领券购买直降120元</dd>
+      <dd>新商城开业！所有商品折扣促销！！！/dd></dd>
     </dl>
+
     <dl>
       <dt>配送</dt>
       <dd>至</dd>
@@ -21,7 +22,7 @@
       <dd>
         <span>无忧退货</span>
         <span>快速退款</span>
-        <span>免费包邮</span>
+        <span>到额包邮</span>
         <a href="javascript:;">了解详情</a>
       </dd>
     </dl>
@@ -30,7 +31,13 @@
 
 <script>
 export default {
-  name: 'GoodsIntroduce'
+  name: 'GoodsIntroduce',
+  //props处获取参数
+  props:{
+    GoodName:String,
+    GoodIntroduce:String,
+    GoodPrice:int
+  }
 }
 </script>
 

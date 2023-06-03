@@ -19,6 +19,7 @@
 <script>
 import { reactive, toRefs, ref } from "vue";
 export default {
+  //使用props定义要从上一个页面传入的参数
   props:{
     image:String
   },
