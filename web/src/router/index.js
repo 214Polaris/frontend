@@ -1,8 +1,11 @@
-import Login from "../views/Login/Login_user.vue";
-import Activity from "../views/Details/index.vue";
+import Login from "../views/Login/index.vue";
+import Activity from "../components/details.vue";
 import Home from "../views/home/index";
-import Details from "../views/Details/index.vue";
+import Details from "../views/Details/details_page";
 import Layout from "../views/Layout/index";
+import Member from "@/views/member/index.vue";
+import UserInfo from "@/views/member/components/userInfo.vue";
+import userOrder from "@/views/member/components/userOrder.vue";
 import { createRouter, createWebHashHistory } from "vue-router";
 
 const routes = [
@@ -20,8 +23,22 @@ const routes = [
     children: [
       {
         path: "",
-        name: "home",
         component: Home,
+      },
+      {
+        path: "member",
+        name: "member",
+        component: Member,
+        children: [
+          {
+            path: "",
+            component: UserInfo,
+          },
+          {
+            path: "order",
+            component: userOrder,
+          },
+        ],
       },
       {
         path: "Details/:goodId",
