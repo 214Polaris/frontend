@@ -16,7 +16,7 @@
 
 <style scoped lang="scss">
 .container {
-  height: 60px;
+  height: 50%;
   width: auto;
   display: flex;
   background-color: #fff;
@@ -25,18 +25,18 @@
   justify-content: space-between;
 
   .left {
-    margin-left: 60px;
+    margin-left: 4vw;
     img {
-      height: 60px;
+      height: 4vw;
       width: auto;
       object-fit: contain;
     }
   }
 
   .right {
-    margin-right: 30px;
+    margin-right: 4vw;
     a {
-      font-size: 16px;
+      font-size: 1vw;
       color: #000;
     }
   }

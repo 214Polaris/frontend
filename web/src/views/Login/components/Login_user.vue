@@ -29,7 +29,7 @@
           </div>
           <el-button
             type="primary"
-            class="btn btn-primary"
+            class="btn-primary"
             @click="login"
             :loading="isSending"
           >
@@ -81,7 +81,7 @@
           </div>
           <el-button
             type="primary"
-            class="btn btn-primary"
+            class="btn-primary"
             @click="register"
             :loading="isSending"
           >
@@ -225,44 +225,49 @@ export default {
 
 <style lang="scss">
 .login-container {
-  display: relative;
-  height: 450px;
+  position: absolute;
+  width: 100%;
+  height: 70%;
   background-color: #f5f5f5;
   background: url(@/assets/LoginBackground.png) no-repeat center / cover;
 }
 
 .login-form {
-  position: relative;
+  position: absolute;
   text-align: center;
-  left: 870px;
-  top: 20px;
-  height: 350px;
-  width: 250px;
-  padding: 32px;
+  right: 10%;
+  top: 20%;
+  height: 53%;
+  width: 20%;
+  padding: 2%;
   border-radius: 4px;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .login-form h2 {
-  margin-bottom: 24px;
-  text-align: center;
+  padding: 2%;
+  font-size: 1.5vw;
+  margin-top: 0.5%;
 }
 
 .form-group {
+  padding: 2%;
+  font-size: 1vw;
+  white-space: nowrap;
+  display: block;
   margin-bottom: 16px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 8px;
 }
 
 .form-control {
   display: block;
-  width: 100%;
-  padding: 8px;
-  font-size: 16px;
+  width: 20vw;
+  height: 1.75vw;
+  font-size: 1vw;
   border-radius: 4px;
   border: 1px solid #ccc;
 }
@@ -276,46 +281,46 @@ export default {
 .invalid-feedback {
   display: block;
   color: #dc3545;
-  font-size: 14px;
-  margin-top: 4px;
+  font-size: 1vw;
 }
 
 .btn-primary {
-  display: block;
-  width: 100%;
-  padding: 8px;
-  font-size: 16px;
-  border-radius: 4px;
-  border: none;
-  background-color: #007bff;
-  cursor: pointer;
-  color: #fff;
+  width: 50%;
+  padding: 0;
 }
 
 .btn-primary:disabled {
+  width: 50%;
   opacity: 0.7;
   cursor: not-allowed;
 }
 
 .form-group mt-3 {
+  font-size: 1vw;
   text-align: center;
 }
 
 .form-group a {
+  font-size: 1vw;
   color: #007bff;
   cursor: pointer;
 }
 
 .register-form {
-  position: relative;
+  position: absolute;
   text-align: center;
-  left: 870px;
-  top: 20px;
-  height: 350px;
-  width: 250px;
-  padding: 32px;
+  right: 10%;
+  top: 14%;
+  height: 60%;
+  width: 20%;
+  padding: 3%;
   border-radius: 4px;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.register-form h2 {
+  margin-top: 0.1%;
+  padding: 1%;
+  font-size: 1.5vw;
 }
 </style>
