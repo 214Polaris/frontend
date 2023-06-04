@@ -20,8 +20,8 @@
 import { reactive, toRefs, ref } from "vue";
 export default {
   //使用props定义要从上一个页面传入的参数
-  props:{
-    image:String
+  props: {
+    image: String,
   },
   setup() {
     const boothRef = ref(null);
@@ -29,7 +29,7 @@ export default {
     const bigImg = ref(null);
     const bigImgBox = ref(null);
     const state = reactive({
-      boxShow: false
+      boxShow: false,
     });
     //监听鼠标移动
     const onMouseOver = () => {

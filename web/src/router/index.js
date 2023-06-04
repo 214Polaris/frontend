@@ -1,67 +1,69 @@
-import Login from '../views/Login/Login_user.vue'
-import Activity from '../views/Details/index.vue'
-import Home from '../views/home/index'
-import Details from '../views/Details/index.vue'
-import Layout from '../views/Layout/index'
-import { createRouter, createWebHashHistory } from 'vue-router'
+import Login from "../views/Login/Login_user.vue";
+import Activity from "../views/Details/index.vue";
+import Home from "../views/home/index";
+import Details from "../views/Details/index.vue";
+import Layout from "../views/Layout/index";
+import { createRouter, createWebHashHistory } from "vue-router";
 
 const routes = [
   //测试用路由，当连接不到后端时调用这里的路由并更改Activity来进行调试
   {
-    path: '/activity',
-    name: 'Activity',
-    component: Activity
+    path: "/activity",
+    name: "Activity",
+    component: Activity,
   },
   // Home组件，显示中心内容
   {
-    path: '/',
-    name: 'Layout',
+    path: "/",
+    name: "Layout",
     component: Layout,
     children: [
       {
-        path: '',
-        name: 'home',
-        component: Home
+        path: "",
+        name: "home",
+        component: Home,
       },
       {
-        path: 'Details/:goodId',
-        name: 'Details',
+        path: "Details/:goodId",
+        name: "Details",
         //添加路由守卫请求
         meta: {
-          requireAuth: true
+          requireAuth: true,
         },
-        component: Details
-      }
-    ]
+        component: Details,
+      },
+    ],
   },
   {
-    path: '/login',
-    name: 'login',
-    component: Login
+    path: "/login",
+    name: "login",
+    component: Login,
   },
-]
+];
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes
-})
+  routes,
+});
 
 // 路由拦截，要求用户登录之后才可以访问,需要拦截的路由记得requireAuth
 router.beforeEach((to, from, next) => {
-  const token = localStorage.token
-  if (to.meta.requireAuth) { // 判断该路由是否需要登录权限
-    if (token) { // 通过vuex state获取当前的token是否存在
-      next()
+  const token = localStorage.token;
+  if (to.meta.requireAuth) {
+    // 判断该路由是否需要登录权限
+    if (token) {
+      // 通过vuex state获取当前的token是否存在
+      next();
     } else {
-      window.console.log('该页面需要登陆')
+      window.console.log("该页面需要登陆");
       next({
-        path: '/login'
+        path: "/login",
         // query: {redirect: to.fullPath} // 将跳转的路由path作为参数，登录成功后跳转到该路由
-      })
+      });
     }
   } else {
-    next()
+    next();
   }
-})
+});
 
-export default router
+export default router;

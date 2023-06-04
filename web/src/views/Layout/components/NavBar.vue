@@ -70,75 +70,73 @@
 </template>
 
 <script>
-import { ElMessageBox } from 'element-plus'
+import { ElMessageBox } from "element-plus";
 export default {
-  data () {
+  data() {
     return {
       token: localStorage.token,
-    }
+    };
   },
   computed: {
-  // 我们使用计算属性来获取到当前点击的菜单的路由路径，然后设置default-active中的值
-  // 使得菜单在载入时就能对应高亮
+    // 我们使用计算属性来获取到当前点击的菜单的路由路径，然后设置default-active中的值
+    // 使得菜单在载入时就能对应高亮
     activeMenu() {
-      const route = this.$route
-      const { path, name } = route
+      const route = this.$route;
+      const { path, name } = route;
       // if set path, the sidebar will highlight the path you set
       // 可以在路由配置文件中设置自定义的路由路径到meta.activeMenu属性中，来控制菜单自定义高亮显示
-      if(name){
-        return name
+      if (name) {
+        return name;
       }
-      return path
-    }
+      return path;
+    },
   },
   methods: {
     //跳转到登陆页面
-    login () {
-      this.$router.push({ name: 'login' })
+    login() {
+      this.$router.push({ name: "login" });
     },
     //跳转到主页
-    goback () {
-      this.$router.push({ path:'/' })
+    goback() {
+      this.$router.push({ path: "/" });
     },
     //退出登录
-    logout () {
+    logout() {
       ElMessageBox.alert("您已退出登录").then(() => {
-        this.$store.commit('LOGOUT')
-        this.$router.push({ path:'/' })
-      }
-      )
+        this.$store.commit("LOGOUT");
+        this.$router.push({ path: "/" });
+      });
     },
     //搜索功能（暂不可用）
-    search () {
+    search() {
       ElMessageBox.alert("当前没有连接到后端").then(() => {
-        this.$router.push({ name: 'login' })
-      }
-      )
+        this.$router.push({ name: "login" });
+      });
     },
     //进入订单页面
-    MyOrders () {
+    MyOrders() {
       if (!this.token) {
         ElMessageBox.alert("请先登录").then(() => {
-          this.$router.push({ name: 'login' })
-        }
-        )
+          this.$router.push({ name: "login" });
+        });
       }
       //补充跳转到订单页面
-      else{}
+      else {
+      }
     },
     //进入个人信息页面
-    MyInfo(){
+    MyInfo() {
       if (!this.token) {
         ElMessageBox.alert("请先登录").then(() => {
-          this.$router.push({ name: 'login' })
-        }
-        )
+          this.$router.push({ name: "login" });
+        });
       }
       //补充跳转到个人信息页面
-      else{}
-    }
-  }
-}
+      else {
+      }
+    },
+  },
+};
 </script>
 
 <style>

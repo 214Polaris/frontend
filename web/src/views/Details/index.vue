@@ -25,39 +25,41 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
-import GoodsImage from './components/details_image.vue'
-import GoodsIntroduce from './components/details_introduce.vue'
+import axios from "axios";
+import GoodsImage from "./components/details_image.vue";
+import GoodsIntroduce from "./components/details_introduce.vue";
 export default {
-  data () {
-    return{
+  data() {
+    return {
       //从上个页面获取点击的商品id
       good_id: this.$route.params.goodId,
-      good:null
-    }
+      good: null,
+    };
   },
   //向后端请求返回对应商品
-  mounted(){
+  mounted() {
     axios({
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          method: 'post',
-          url: '/api/details',
-          data: {
-            good_id: this.good_id
-          }
-        }).then((response)=>{
-          this.good = response.data
-        }).catch(error => {
-      console.error(error)
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      method: "post",
+      url: "/api/details",
+      data: {
+        good_id: this.good_id,
+      },
     })
-},
-  components:{
+      .then((response) => {
+        this.good = response.data;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  },
+  components: {
     GoodsIntroduce,
-    GoodsImage
-  }
-}
+    GoodsImage,
+  },
+};
 </script>
 <style scoped lang="scss">
 @import "@/assets/variables.scss";

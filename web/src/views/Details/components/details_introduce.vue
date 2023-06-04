@@ -31,14 +31,14 @@
 
 <script>
 export default {
-  name: 'GoodsIntroduce',
+  name: "GoodsIntroduce",
   //props处获取参数
-  props:{
-    GoodName:String,
-    GoodIntroduce:String,
-    GoodPrice:int
-  }
-}
+  props: {
+    GoodName: String,
+    GoodIntroduce: String,
+    GoodPrice: int,
+  },
+};
 </script>
 
 <style lang="scss" scoped>

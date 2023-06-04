@@ -44,59 +44,62 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names, vue/no-reserved-component-names
-  name:'Details',
-  data () {
+  name: "Details",
+  data() {
     return {
       good_id: this.$route.params.goodId,
-      goodsList:null,
+      goodsList: null,
       isActive: false,
-      dis: true
-    }
+      dis: true,
+    };
   },
-  mounted () {
-    axios.get('/api/goodslist').then(response => {
-      this.goodsList = response.data
-    }).catch(error => {
-      console.error(error)
-    })
+  mounted() {
+    axios
+      .get("/api/goodslist")
+      .then((response) => {
+        this.goodsList = response.data;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   },
-  methods: {  
-    add (good_id) {
-      this.$store.state.goodsList[good_id].counter++
+  methods: {
+    add(good_id) {
+      this.$store.state.goodsList[good_id].counter++;
       if (this.$store.state.goodsList[good_id].counter >= 0) {
-        this.dis = false
+        this.dis = false;
       }
     },
-    sub (good_id) {
-      this.$store.state.goodsList[good_id].counter--
+    sub(good_id) {
+      this.$store.state.goodsList[good_id].counter--;
       if (this.$store.state.goodsList[good_id].counter == 0) {
-        this.dis = true
+        this.dis = true;
       } else {
-        this.dis = false
+        this.dis = false;
       }
     },
-    goHome () {
-      this.$router.push('/home')
+    goHome() {
+      this.$router.push("/home");
     },
-    addToCart () {
+    addToCart() {
       if (this.$store.state.goodsList[this.good_id].counter >= 1) {
-        this.isActive = true
+        this.isActive = true;
         // 传入商品id
-        const goodsListID = this.$store.state.goodsList[this.good_id].id
-        const cart = this.$store.state.cart
-        const result = cart.find(ele => ele.id === goodsListID)
+        const goodsListID = this.$store.state.goodsList[this.good_id].id;
+        const cart = this.$store.state.cart;
+        const result = cart.find((ele) => ele.id === goodsListID);
         if (result === undefined) {
-          cart.push(this.$store.state.goodsList[this.good_id])
+          cart.push(this.$store.state.goodsList[this.good_id]);
         } else {
-          document.querySelector('.stopcart').innerHTML = '请勿重复添加'
+          document.querySelector(".stopcart").innerHTML = "请勿重复添加";
         }
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

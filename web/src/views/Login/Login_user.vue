@@ -101,123 +101,128 @@
 </template>
 
 <script>
-import axios from 'axios'
-import { ElMessageBox } from 'element-plus'
+import axios from "axios";
+import { ElMessageBox } from "element-plus";
 export default {
-  data () {
+  data() {
     return {
-      isSending:false,
-      username: '',
-      password: '',
+      isSending: false,
+      username: "",
+      password: "",
       isUsernameValid: true,
       isButtonDisabled: false,
       isRegisterFormVisible: false,
-      registerUsername: '',
-      registerPassword: '',
-      confirmPassword: '',
+      registerUsername: "",
+      registerPassword: "",
+      confirmPassword: "",
       isRegisterUsernameValid: true,
       isConfirmPasswordValid: true,
       isRegisterButtonDisabled: false,
-    }
+    };
   },
   methods: {
-    back () {
-      this.$router.replace({ path:'/' })
+    back() {
+      this.$router.replace({ path: "/" });
     },
-    toggle () {
-      this.isRegisterFormVisible = !this.isRegisterFormVisible
-      this.username = ''
-      this.password = ''
-      this.isUsernameValid = true
-      this.isButtonDisabled = false
-      this.registerUsername = ''
-      this.registerPassword = ''
-      this.confirmPassword = ''
-      this.isRegisterUsernameValid = true
-      this.isConfirmPasswordValid = true
-      this.isRegisterButtonDisabled = false
+    toggle() {
+      this.isRegisterFormVisible = !this.isRegisterFormVisible;
+      this.username = "";
+      this.password = "";
+      this.isUsernameValid = true;
+      this.isButtonDisabled = false;
+      this.registerUsername = "";
+      this.registerPassword = "";
+      this.confirmPassword = "";
+      this.isRegisterUsernameValid = true;
+      this.isConfirmPasswordValid = true;
+      this.isRegisterButtonDisabled = false;
     },
-    login () {
+    login() {
       if (this.username.length < 5 || this.username.length > 12) {
-        this.isUsernameValid = false
+        this.isUsernameValid = false;
       } else {
-        this.isUsernameValid = true
+        this.isUsernameValid = true;
       }
       if (this.isUsernameValid && this.password.length > 0) {
-        this.isSending = true
+        this.isSending = true;
         // 发送登录请求
         axios({
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            "Content-Type": "application/x-www-form-urlencoded",
           },
-          method: 'post',
-          url: '/api/Login',
+          method: "post",
+          url: "/api/Login",
           data: {
             user: this.username,
-            pass: this.password
-          }
-        }).then((response) => {
-          if (response.data.code === 200) {
-            this.$store.commit('SET_TOKEN', response.data.token)
-            this.$store.commit('GET_USER', response.data.user)
-            console.log("登录成功！")
-            this.$router.push({ path:'/' })
-          }
+            pass: this.password,
+          },
         })
+          .then((response) => {
+            if (response.data.code === 200) {
+              this.$store.commit("SET_TOKEN", response.data.token);
+              this.$store.commit("GET_USER", response.data.user);
+              console.log("登录成功！");
+              this.$router.push({ path: "/" });
+            }
+          })
           .catch(function () {
             ElMessageBox.alert("您输入的账号或密码错误").then(() => {
-              location.reload()
-              this.$router.go(0)
-            })
-          })
+              location.reload();
+              this.$router.go(0);
+            });
+          });
       }
     },
-    register () {
-      if (this.registerUsername.length < 5 || this.registerUsername.length > 12) {
-        this.isRegisterUsernameValid = false
+    register() {
+      if (
+        this.registerUsername.length < 5 ||
+        this.registerUsername.length > 12
+      ) {
+        this.isRegisterUsernameValid = false;
       } else {
-        this.isRegisterUsernameValid = true
+        this.isRegisterUsernameValid = true;
       }
       if (this.registerPassword !== this.confirmPassword) {
-        this.isConfirmPasswordValid = false
+        this.isConfirmPasswordValid = false;
       } else {
-        this.isConfirmPasswordValid = true
+        this.isConfirmPasswordValid = true;
       }
       if (this.isRegisterUsernameValid && this.isConfirmPasswordValid) {
-        this.isSending = true
+        this.isSending = true;
         // 发送注册请求
         axios({
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            "Content-Type": "application/x-www-form-urlencoded",
           },
-          method: 'post',
-          url: '/api/Register',
+          method: "post",
+          url: "/api/Register",
           data: {
             user: this.registerUsername,
-            pass: this.registerPassword
-          }
-        }).then((response) => {
-          if (response.data.code === 200) {
-            this.$store.commit('SET_TOKEN', response.data.token)
-            this.$store.commit('GET_USER', response.data.user)
-            this.$message({
-              message: '注册成功',
-              type: 'success'
-            })
-            location.reload()
-            this.$router.replace({ path:'/' })
-          }
+            pass: this.registerPassword,
+          },
         })
+          .then((response) => {
+            if (response.data.code === 200) {
+              this.$store.commit("SET_TOKEN", response.data.token);
+              this.$store.commit("GET_USER", response.data.user);
+              this.$message({
+                message: "注册成功",
+                type: "success",
+              });
+              location.reload();
+              this.$router.replace({ path: "/" });
+            }
+          })
           .catch(function () {
             ElMessageBox.alert("用户已存在！").then(() => {
-              location.reload()
-              this.$router.go(0)
-            })
-          })
+              location.reload();
+              this.$router.go(0);
+            });
+          });
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style>
