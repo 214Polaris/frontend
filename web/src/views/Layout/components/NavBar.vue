@@ -9,7 +9,8 @@
     router
     style="overflow: hidden; display: flex"
   >
-    <el-menu-item index="MainPage" @click="goback()">首页</el-menu-item>
+    <div><img src="@/assets/Logo.png" alt="Logo" class="logo" /></div>
+    <el-menu-item index="Mainpage" @click="goback()">首页</el-menu-item>
     <el-submenu index="2">
       <template #title>我的用户</template>
       <!--到时这里记得改index，实现高亮-->
@@ -40,22 +41,23 @@
         placeholder="请输入想要搜索的商品"
         @select="handleSelect"
         style="width: 400px; margin-top: 10px"
-      ></el-autocomplete>
+      >
+      </el-autocomplete>
       <el-button
         type="primary"
         @click="search"
         style="margin-top: 10px; margin-left: 5px"
-        >搜索</el-button
+        ><i class="iconfont icon-search1"></i>搜索</el-button
       >
     </div>
     <!--登录按钮-->
     <div class="user">
       <el-button
         type="primary"
-        style="margin-top: 10px; margin-bottom: 10px"
+        style="margin-top: 7px"
         @click="login"
         v-if="!token"
-        >登录
+        ><i class="iconfont icon-login" @click="login"></i>登录
       </el-button>
       <!--用户图标，之后在这里添加点击到用户主页面-->
       <div v-if="token">
@@ -70,77 +72,75 @@
 </template>
 
 <script>
-import { ElMessageBox } from 'element-plus'
+import { ElMessageBox } from "element-plus";
 export default {
-  data () {
+  data() {
     return {
       token: localStorage.token,
-    }
+    };
   },
   computed: {
-  // 我们使用计算属性来获取到当前点击的菜单的路由路径，然后设置default-active中的值
-  // 使得菜单在载入时就能对应高亮
+    // 我们使用计算属性来获取到当前点击的菜单的路由路径，然后设置default-active中的值
+    // 使得菜单在载入时就能对应高亮
     activeMenu() {
-      const route = this.$route
-      const { path, name } = route
+      const route = this.$route;
+      const { path, name } = route;
       // if set path, the sidebar will highlight the path you set
       // 可以在路由配置文件中设置自定义的路由路径到meta.activeMenu属性中，来控制菜单自定义高亮显示
-      if(name){
-        return name
+      if (name) {
+        return name;
       }
-      return path
-    }
+      return path;
+    },
   },
   methods: {
     //跳转到登陆页面
-    login () {
-      this.$router.push({ name: 'login' })
+    login() {
+      this.$router.push({ name: "login" });
     },
     //跳转到主页
-    goback () {
-      this.$router.push({ path:'/' })
+    goback() {
+      this.$router.push({ path: "/" });
     },
     //退出登录
-    logout () {
+    logout() {
       ElMessageBox.alert("您已退出登录").then(() => {
-        this.$store.commit('LOGOUT')
-      }
-      )
+        this.$store.commit("LOGOUT");
+      });
     },
     //搜索功能（暂不可用）
-    search () {
+    search() {
       ElMessageBox.alert("当前没有连接到后端").then(() => {
-        this.$router.push({ name: 'login' })
-      }
-      )
+        this.$router.push({ name: "login" });
+      });
     },
     //进入订单页面
-    MyOrders () {
+    MyOrders() {
       if (!this.token) {
         ElMessageBox.alert("请先登录").then(() => {
-          this.$router.push({ name: 'login' })
-        }
-        )
+          this.$router.push({ name: "login" });
+        });
       }
       //补充跳转到订单页面
-      else{}
+      else {
+      }
     },
     //进入个人信息页面
-    MyInfo(){
+    MyInfo() {
       if (!this.token) {
         ElMessageBox.alert("请先登录").then(() => {
-          this.$router.push({ name: 'login' })
-        }
-        )
+          this.$router.push({ name: "login" });
+        });
       }
       //补充跳转到个人信息页面
-      else{}
-    }
-  }
-}
+      else {
+      }
+    },
+  },
+};
 </script>
 
-<style>
+<style scoped lang="scss">
 @import "../../../assets/base.css";
 
 #app {
@@ -156,5 +156,16 @@ export default {
   position: absolute;
   right: 10px;
   top: 2px;
+}
+
+.iconfont {
+  font-size: var(--el-button-font-weight);
+  padding-right: 7px;
+}
+
+div img.logo {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
 }
 </style>
