@@ -2,7 +2,7 @@
   <div class="container">
     <div class="left">
       <router-link to="/"
-        ><img src="@/assets/Logo.png" alt="Logo"
+        ><img src="@/assets/logo.png" alt="Logo"
       /></router-link>
     </div>
     <div class="right">

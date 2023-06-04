@@ -20,23 +20,26 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'recommend',
-  mounted () {
-    axios.get('/api/goodslist').then(response => {
-      this.goodsList = response.data
-    }).catch(error => {
-      console.error(error)
-    })
+  name: "recommend",
+  mounted() {
+    axios
+      .get("/api/goodslist")
+      .then((response) => {
+        this.goodsList = response.data;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   },
-  data () {
+  data() {
     return {
-      goodsList:null
-    }
-  }
-}
+      goodsList: null,
+    };
+  },
+};
 </script>
 
 <style scoped>

@@ -29,59 +29,58 @@
   </div>
 </template>
 
-
 <script>
 export default {
-  data () {
+  data() {
     return {
-      searchQuery: '',
+      searchQuery: "",
       products: [],
       // 这里只是一个测试，可以从后端拉去对应的图片然后放在这里的datalist
       dataList: [
-        'https://i1.mifile.cn/a4/xmad_15535933141925_ulkYv.jpg',
-        'https://i1.mifile.cn/a4/xmad_15532384207972_iJXSx.jpg',
-        'https://i1.mifile.cn/a4/xmad_15517939170939_oiXCK.jpg'
+        "https://i1.mifile.cn/a4/xmad_15535933141925_ulkYv.jpg",
+        "https://i1.mifile.cn/a4/xmad_15532384207972_iJXSx.jpg",
+        "https://i1.mifile.cn/a4/xmad_15517939170939_oiXCK.jpg",
       ],
       currentIndex: 0, // 默认显示图片
-      timer: null // 定时器
-    }
+      timer: null, // 定时器
+    };
   },
-  mounted () {
+  mounted() {
     setTimeout(() => {
-      this.runInv()
-    })
+      this.runInv();
+    });
   },
   // 处理图片切换
   computed: {
     // 上一张
-    prevIndex () {
+    prevIndex() {
       if (this.currentIndex === 0) {
-        return this.dataList.length - 1
+        return this.dataList.length - 1;
       } else {
-        return this.currentIndex - 1
+        return this.currentIndex - 1;
       }
     },
     // 下一张
-    nextIndex () {
+    nextIndex() {
       if (this.currentIndex === this.dataList.length - 1) {
-        return 0
+        return 0;
       } else {
-        return this.currentIndex + 1
+        return this.currentIndex + 1;
       }
-    }
+    },
   },
   methods: {
     // 定时滚动图片
-    stopInv () {
-      clearInterval(this.timer)
+    stopInv() {
+      clearInterval(this.timer);
     },
-    runInv () {
+    runInv() {
       this.timer = setInterval(() => {
-        this.gotoPage(this.nextIndex)
-      }, 3000)
+        this.gotoPage(this.nextIndex);
+      }, 3000);
     },
-    gotoPage (index) {
-      this.currentIndex = index
+    gotoPage(index) {
+      this.currentIndex = index;
     },
     /*
     search () {
@@ -97,8 +96,8 @@ export default {
         })
     }
   },*/
-},
-}
+  },
+};
 </script>
 
 <style scoped>

@@ -9,7 +9,7 @@
     router
     style="overflow: hidden; display: flex"
   >
-    <div><img src="@/assets/Logo.png" alt="Logo" class="logo" /></div>
+    <div><img src="@/assets/logo.png" alt="Logo" class="logo" /></div>
     <el-menu-item index="Mainpage" @click="goback()">首页</el-menu-item>
     <el-submenu index="2">
       <template #title>我的用户</template>
@@ -106,6 +106,7 @@ export default {
     logout() {
       ElMessageBox.alert("您已退出登录").then(() => {
         this.$store.commit("LOGOUT");
+        this.$router.push({ path: "/" });
       });
     },
     //搜索功能（暂不可用）

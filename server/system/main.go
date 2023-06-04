@@ -1,10 +1,9 @@
 package main
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
+	"net/http"
 )
 
 func Application(ctx *gin.Context) {
@@ -13,17 +12,16 @@ func Application(ctx *gin.Context) {
 	})
 }
 func main() {
-	//建立数据库
-	db := InitDB()
-	db.Begin()
 	// 创建一个默认的路由引擎
 	r := gin.Default()
 	r.StaticFS("/js", http.Dir("dist/js"))
 	r.StaticFS("/css", http.Dir("dist/css"))
+	r.StaticFS("/fonts", http.Dir("dist/fonts"))
 	r.LoadHTMLGlob("dist/index.html")
+	//r.Use(UserSrv.HandleRequest)
 	r.GET("/", Application)
-	r.POST("/api/Login", Login)
-	r.POST("/api/Register", Register)
+	r.GET("/api/goodslist", ProductSrc.SendAll)
+	r.POST("/api/Login", UserSrv.Login)
+	r.POST("/api/Register", UserSrv.Register)
 	r.Run()
-	db.Close()
 }

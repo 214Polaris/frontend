@@ -234,7 +234,7 @@ export default {
 .login-form {
   position: relative;
   text-align: center;
-  left: 900px;
+  left: 870px;
   top: 20px;
   height: 350px;
   width: 250px;
@@ -309,7 +309,7 @@ export default {
 .register-form {
   position: relative;
   text-align: center;
-  left: 900px;
+  left: 870px;
   top: 20px;
   height: 350px;
   width: 250px;
