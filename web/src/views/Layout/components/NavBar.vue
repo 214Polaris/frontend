@@ -9,7 +9,8 @@
     router
     style="overflow: hidden; display: flex"
   >
-    <el-menu-item index="MainPage" @click="goback()">首页</el-menu-item>
+    <div><img src="@/assets/logo.png" alt="Logo" class="logo" /></div>
+    <el-menu-item index="Mainpage" @click="goback()">首页</el-menu-item>
     <el-submenu index="2">
       <template #title>我的用户</template>
       <!--到时这里记得改index，实现高亮-->
@@ -40,22 +41,23 @@
         placeholder="请输入想要搜索的商品"
         @select="handleSelect"
         style="width: 400px; margin-top: 10px"
-      ></el-autocomplete>
+      >
+      </el-autocomplete>
       <el-button
         type="primary"
         @click="search"
         style="margin-top: 10px; margin-left: 5px"
-        >搜索</el-button
+        ><i class="iconfont icon-search1"></i>搜索</el-button
       >
     </div>
     <!--登录按钮-->
     <div class="user">
       <el-button
         type="primary"
-        style="margin-top: 10px; margin-bottom: 10px"
+        style="margin-top: 7px"
         @click="login"
         v-if="!token"
-        >登录
+        ><i class="iconfont icon-login" @click="login"></i>登录
       </el-button>
       <!--用户图标，之后在这里添加点击到用户主页面-->
       <div v-if="token">
@@ -139,7 +141,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped lang="scss">
 @import "../../../assets/base.css";
 
 #app {
@@ -155,5 +157,16 @@ export default {
   position: absolute;
   right: 10px;
   top: 2px;
+}
+
+.iconfont {
+  font-size: var(--el-button-font-weight);
+  padding-right: 7px;
+}
+
+div img.logo {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
 }
 </style>
