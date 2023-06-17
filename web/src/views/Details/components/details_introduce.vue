@@ -36,7 +36,7 @@ export default {
   props: {
     GoodName: String,
     GoodIntroduce: String,
-    GoodPrice: int,
+    GoodPrice: String,
   },
 };
 </script>

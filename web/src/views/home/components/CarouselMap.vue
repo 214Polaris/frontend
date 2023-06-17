@@ -179,13 +179,13 @@ ul li {
 }
 
 .wholepage {
-  max-width: 1800px;
+  width: 95vw;
   margin: 0 auto;
   position: relative;
 }
 
 .wholepage img {
-  width: 100%;
+  width: 95vw;
   display: block;
 }
 
