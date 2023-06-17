@@ -1,12 +1,17 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 const addressDialogVisible = ref(false);
+const infoDialogVisible = ref(false);
 const form = ref({
   name: "",
   phone: "",
+  email: "",
+  birthday: "",
   address: "",
 });
+
+onMounted(() => {});
 </script>
 
 <template>
@@ -20,7 +25,14 @@ const form = ref({
     </div>
     <div class="item">
       <a href="javascript:;">
-        <span class="iconfont icon-gerenxinxi1"></span>
+        <span
+          class="iconfont icon-gerenxinxi1"
+          @click="
+            () => {
+              infoDialogVisible = true;
+            }
+          "
+        ></span>
         <p>个人信息</p>
       </a>
       <a href="javascript:;">
@@ -47,6 +59,34 @@ const form = ref({
       </div>
     </div>
   </div>
+  <el-dialog v-model="infoDialogVisible" title="修改个人信息">
+    <el-form v-model="form" label-width="100px">
+      <el-form-item label="账号：">
+        <el-input v-model="form.name" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="用户名：">
+        <el-input v-model.number="form.phone"></el-input>
+      </el-form-item>
+      <el-form-item label="邮箱：">
+        <el-input v-model="form.email"></el-input>
+      </el-form-item>
+      <el-form-item label="出生日期：">
+        <el-date-picker
+          v-model="form.birthday"
+          type="date"
+          placeholder="Select date and time"
+        ></el-date-picker>
+      </el-form-item>
+      <el-form-item label="详细地址：">
+        <el-input
+          v-model="form.address"
+          autocomplete="off"
+          type="textarea"
+          autosize
+        ></el-input>
+      </el-form-item>
+    </el-form>
+  </el-dialog>
   <el-dialog v-model="addressDialogVisible" title="修改地址">
     <el-form v-model="form" label-width="100px">
       <el-form-item label="姓名：">
