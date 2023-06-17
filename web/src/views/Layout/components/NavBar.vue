@@ -135,6 +135,7 @@ export default {
       }
       //补充跳转到个人信息页面
       else {
+        this.$router.push({ path: "/member/" });
       }
     },
   },
