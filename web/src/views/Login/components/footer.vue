@@ -1,5 +1,5 @@
 <template>
-  <div class="copyright">
+  <div class="copyright2">
     <p>
       <a href="javascript:;">关于我们</a>
       <a href="javascript:;">帮助中心</a>
@@ -13,7 +13,7 @@
 </template>
 
 <style lang="scss">
-.copyright {
+.copyright2 {
   white-space: nowrap;
   position: absolute;
   height: 10%;
