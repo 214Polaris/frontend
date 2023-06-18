@@ -1,11 +1,5 @@
 <template>
   <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
     <title>商品详情</title>
   </head>
 
@@ -19,7 +13,6 @@
         <!-- /page_header -->
         <div class="row justify-content-center">
           <div class="col-lg-8">
-            <div class="owl-carousel owl-theme prod_pics magnific-gallery">
               <!--商品图片栏1-->
               <div class="item">
                 <a
@@ -29,21 +22,7 @@
                   ><img src="../../../../public/img/products/shoes/product_detail_1.jpg" alt=""
                 /></a>
               </div>
-              <!--商品图片栏2-->
-              <div class="item">
-                <a
-                  href="../../../../public/img/products/shoes/product_detail_2.jpg"
-                  title="Photo title"
-                  data-effect="mfp-zoom-in"
-                  ><img
-                    src="../../../../public/img/products/product_placeholder_detail_2.jpg"
-                    data-src="../../../../public/img/products/shoes/product_detail_2.jpg"
-                    alt=""
-                    class="owl-lazy"
-                /></a>
-              </div>
               <!-- /item -->
-            </div>
             <!-- /carousel -->
           </div>
         </div>
@@ -145,16 +124,6 @@
                 >Description</a
               >
             </li>
-            <li class="nav-item">
-              <a
-                id="tab-B"
-                href="#pane-B"
-                class="nav-link"
-                data-bs-toggle="tab"
-                role="tab"
-                >Reviews</a
-              >
-            </li>
           </ul>
         </div>
       </div>
@@ -244,124 +213,6 @@
               </div>
             </div>
             <!-- /TAB A -->
-            <div
-              id="pane-B"
-              class="card tab-pane fade"
-              role="tabpanel"
-              aria-labelledby="tab-B"
-            >
-              <div class="card-header" role="tab" id="heading-B">
-                <h5 class="mb-0">
-                  <a
-                    class="collapsed"
-                    data-bs-toggle="collapse"
-                    href="#collapse-B"
-                    aria-expanded="false"
-                    aria-controls="collapse-B"
-                  >
-                    Reviews
-                  </a>
-                </h5>
-              </div>
-              <div
-                id="collapse-B"
-                class="collapse"
-                role="tabpanel"
-                aria-labelledby="heading-B"
-              >
-                <div class="card-body">
-                  <div class="row justify-content-between">
-                    <div class="col-lg-5">
-                      <div class="review_content">
-                        <div class="clearfix add_bottom_10">
-                          <span class="rating"
-                            ><i class="icon-star"></i><i class="icon-star"></i
-                            ><i class="icon-star"></i><i class="icon-star"></i
-                            ><i class="icon-star"></i><em>5.0/5.0</em></span
-                          >
-                          <em>Published 54 minutes ago</em>
-                        </div>
-                        <h4>"Commpletely satisfied"</h4>
-                        <p>
-                          Eos tollit ancillae ea, lorem consulatu qui ne, eu
-                          eros eirmod scaevola sea. Et nec tantas accusamus
-                          salutatus, sit commodo veritus te, erat legere fabulas
-                          has ut. Rebum laudem cum ea, ius essent fuisset ut.
-                          Viderer petentium cu his.
-                        </p>
-                      </div>
-                    </div>
-                    <div class="col-lg-5">
-                      <div class="review_content">
-                        <div class="clearfix add_bottom_10">
-                          <span class="rating"
-                            ><i class="icon-star"></i><i class="icon-star"></i
-                            ><i class="icon-star"></i
-                            ><i class="icon-star empty"></i
-                            ><i class="icon-star empty"></i
-                            ><em>4.0/5.0</em></span
-                          >
-                          <em>Published 1 day ago</em>
-                        </div>
-                        <h4>"Always the best"</h4>
-                        <p>
-                          Et nec tantas accusamus salutatus, sit commodo veritus
-                          te, erat legere fabulas has ut. Rebum laudem cum ea,
-                          ius essent fuisset ut. Viderer petentium cu his.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- /row -->
-                  <div class="row justify-content-between">
-                    <div class="col-lg-5">
-                      <div class="review_content">
-                        <div class="clearfix add_bottom_10">
-                          <span class="rating"
-                            ><i class="icon-star"></i><i class="icon-star"></i
-                            ><i class="icon-star"></i><i class="icon-star"></i
-                            ><i class="icon-star empty"></i
-                            ><em>4.5/5.0</em></span
-                          >
-                          <em>Published 3 days ago</em>
-                        </div>
-                        <h4>"Outstanding"</h4>
-                        <p>
-                          Eos tollit ancillae ea, lorem consulatu qui ne, eu
-                          eros eirmod scaevola sea. Et nec tantas accusamus
-                          salutatus, sit commodo veritus te, erat legere fabulas
-                          has ut. Rebum laudem cum ea, ius essent fuisset ut.
-                          Viderer petentium cu his.
-                        </p>
-                      </div>
-                    </div>
-                    <div class="col-lg-5">
-                      <div class="review_content">
-                        <div class="clearfix add_bottom_10">
-                          <span class="rating"
-                            ><i class="icon-star"></i><i class="icon-star"></i
-                            ><i class="icon-star"></i><i class="icon-star"></i
-                            ><i class="icon-star"></i><em>5.0/5.0</em></span
-                          >
-                          <em>Published 4 days ago</em>
-                        </div>
-                        <h4>"Excellent"</h4>
-                        <p>
-                          Sit commodo veritus te, erat legere fabulas has ut.
-                          Rebum laudem cum ea, ius essent fuisset ut. Viderer
-                          petentium cu his.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- /row -->
-                  <p class="text-end">
-                    <a href="leave-review.html" class="btn_1">Leave a review</a>
-                  </p>
-                </div>
-                <!-- /card-body -->
-              </div>
-            </div>
             <!-- /tab B -->
           </div>
           <!-- /tab-content -->

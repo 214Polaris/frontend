@@ -7,7 +7,7 @@
     ref="boothRef"
   >
     <!--此处导入图片-->
-    <img :src="image" alt="" v-if="image" />
+    <img :src="image" alt="" v-if="image" class="smallImg"/>
     <!--大图容器-->
     <div class="mask" ref="mask" v-show="boxShow" />
     <div class="big-img_box" ref="bigImgBox" v-show="boxShow">
@@ -82,36 +82,46 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
 .tb-booth {
-  width: 430px;
-  height: 430px;
+  width: 420px;
+  height: 420px;
   position: relative;
   border: 1px solid #cccccc;
+  .smallImg{
+    object-fit: contain;
+    height: 420px;
+    width: auto;
+  }
 }
 .mask {
   position: absolute;
   top: 0;
   left: 0;
-  width: 200px;
-  height: 200px;
+  width: 210px;
+  height: 210px;
   background-color: rgb(61, 110, 206);
   opacity: 0.5;
   cursor: move;
 }
 
 .big-img_box {
+  transition-delay: 1s;
   position: absolute;
   top: 0;
-  left: 530px;
-  width: 500px;
-  height: 500px;
+  left: 500px;
+  width: 400px;
+  height: 400px;
   background-color: #fff;
   border: 1px solid #cccccc;
   overflow: hidden;
+  z-index: 99999999;
 }
 .big-img {
+
   position: absolute;
+  width:200%;
+  height: 200%;
   left: 0;
   top: 0;
 }

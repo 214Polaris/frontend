@@ -3,7 +3,7 @@
   <div v-if="goodsList[good_id]">
     <!-- 图片 -->
     <div class="pic">
-      <img :src="goodsList[good_id].productLink" />
+      <!--<img :src="goodsList[good_id].productLink" />-->
     </div>
     <!-- 文字 -->
     <div class="fonts">

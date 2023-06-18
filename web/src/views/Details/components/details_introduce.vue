@@ -1,32 +1,97 @@
 <!--商品信息介绍-->
 <template>
-  <!--拿去商品信息后放在这里-->
-  <p class="g-name">{{ GoodName }}</p>
-  <p class="g-desc">{{ GoodIntroduce }}</p>
-  <p class="g-price">
-    <span>{{ GoodPrice - 20 }}</span>
-    <span>{{ GoodPrice }}</span>
-  </p>
-  <div class="g-service">
-    <dl>
-      <dt>促销</dt>
-      <dd>新商城开业！所有商品折扣促销！！！/dd></dd>
-    </dl>
-
-    <dl>
-      <dt>配送</dt>
-      <dd>至</dd>
-    </dl>
-    <dl>
-      <dt>服务</dt>
-      <dd>
-        <span>无忧退货</span>
-        <span>快速退款</span>
-        <span>到额包邮</span>
-        <a href="javascript:;">了解详情</a>
-      </dd>
-    </dl>
-  </div>
+  <main class="bg_gray">
+      <div class="tabs_product bg_white version_2">
+        <div class="container">
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+              <a
+                id="tab-A"
+                href="#pane-A"
+                class="nav-link active"
+                data-bs-toggle="tab"
+                role="tab"
+                >Description</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- 简述与评论模块 -->
+      <div class="tab_content_wrapper">
+        <div class="container">
+          <div class="tab-content" role="tablist">
+            <div
+              id="pane-A"
+              class="card tab-pane fade active show"
+              role="tabpanel"
+              aria-labelledby="tab-A"
+            >
+              <div class="card-header" role="tab" id="heading-A">
+                <h5 class="mb-0">
+                  <a
+                    class="collapsed"
+                    data-bs-toggle="collapse"
+                    href="#collapse-A"
+                    aria-expanded="false"
+                    aria-controls="collapse-A"
+                  >
+                    Description
+                  </a>
+                </h5>
+              </div>
+              <div
+                id="collapse-A"
+                class="collapse"
+                role="tabpanel"
+                aria-labelledby="heading-A"
+              >
+                <div class="card-body">
+                  <div class="row justify-content-between">
+                    <div class="col-lg-6">
+                      <h3>商品详情</h3>
+                      {{ GoodIntroduce }}
+                    </div>
+                    <div class="col-lg-5">
+                      <h3>参数</h3>
+                      <div class="table-responsive">
+                        <table class="table table-sm table-striped">
+                          <tbody>
+                            <tr>
+                              <td><strong>Color</strong></td>
+                              <td>Blue, Purple</td>
+                            </tr>
+                            <tr>
+                              <td><strong>Size</strong></td>
+                              <td>150x100x100</td>
+                            </tr>
+                            <tr>
+                              <td><strong>Weight</strong></td>
+                              <td>0.6kg</td>
+                            </tr>
+                            <tr>
+                              <td><strong>Manifacturer</strong></td>
+                              <td>Manifacturer</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <!-- /table-responsive -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /TAB A -->
+            <!-- /tab B -->
+          </div>
+          <!-- /tab-content -->
+        </div>
+        <!-- /container -->
+      </div>
+      <!-- /tab_content_wrapper -->
+    </main>
+    <!-- /main -->
 </template>
 
 <script>
@@ -36,68 +101,11 @@ export default {
   props: {
     GoodName: String,
     GoodIntroduce: String,
-    GoodPrice: String,
   },
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@/assets/variables.scss";
-.g-name {
-  font-size: 22px;
-}
-.g-desc {
-  color: #999;
-  margin-top: 10px;
-}
-.g-price {
-  margin-top: 10px;
-  span {
-    &::before {
-      content: "¥";
-      font-size: 14px;
-    }
-    &:first-child {
-      color: $priceColor;
-      margin-right: 10px;
-      font-size: 22px;
-    }
-    &:last-child {
-      color: #999;
-      text-decoration: line-through;
-      font-size: 16px;
-    }
-  }
-}
-.g-service {
-  background: #f5f5f5;
-  width: 500px;
-  padding: 20px 10px 0 10px;
-  margin-top: 10px;
-  dl {
-    padding-bottom: 20px;
-    display: flex;
-    align-items: center;
-    dt {
-      width: 50px;
-      color: #999;
-    }
-    dd {
-      color: #666;
-      &:last-child {
-        span {
-          margin-right: 10px;
-          &::before {
-            content: "•";
-            color: $xtxColor;
-            margin-right: 2px;
-          }
-        }
-        a {
-          color: $xtxColor;
-        }
-      }
-    }
-  }
-}
+
 </style>

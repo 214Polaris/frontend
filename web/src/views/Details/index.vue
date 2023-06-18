@@ -1,26 +1,38 @@
 <template>
   <div class="container">
     <div class="common-layout">
-      <div class="goods-info">
-        <el-container>
-          <el-aside width="auto">
-            <!-- 商品图片组件 -->
-            <div class="media">
-              <GoodsImage :image="good.productLink" />
+      <el-container>
+        <div class="goods-info">
+          <!-- 商品图片组件 -->
+            <div class="media" style="display: flex;">
+              <!--<GoodsImage :image="good.productLink" />-->
+              <GoodsImage
+                image="https://g-search1.alicdn.com/img/bao/uploaded/i4/i4/38522192/O1CN014WSqOl1S3yk3s1IxK_!!38522192.jpg_460x460Q90.jpg_.webp"
+              />
+              <div style="display: flex; padding-left: 10vw; font-size: large;">
+              <GoodsParams 
+              GoodName="good.productName"
+              GoodIntroduce="good.productIntro"
+              GoodPrice = "182"
+              GoodId="good_id"
+              />
+              </div>
             </div>
-          </el-aside>
-          <el-main>
-            <!--商品信息组件-->
-            <div class="spec">
-              <GoodsIntroduce
+          <!--商品信息组件-->    
+        </div>
+      </el-container>
+    </div>
+    <div class="spec">
+      <!-- <GoodsIntroduce
                 :GoodName="good.productName"
                 :GoodIntroduce="good.productIntro"
                 :GoodPrice="good.productPrice"
-              />
-            </div>
-          </el-main>
-        </el-container>
-      </div>
+              /> -->
+      <GoodsIntroduce
+        GoodName="good.productName"
+        GoodIntroduce="good.productIntro"
+        GoodPrice="good.productPrice"
+      />
     </div>
   </div>
 </template>
@@ -28,6 +40,7 @@
 import axios from "axios";
 import GoodsImage from "./components/details_image.vue";
 import GoodsIntroduce from "./components/details_introduce.vue";
+import GoodsParams from "./components/details_params.vue";
 export default {
   data() {
     return {
@@ -58,25 +71,29 @@ export default {
   components: {
     GoodsIntroduce,
     GoodsImage,
+    GoodsParams,
   },
 };
 </script>
 <style scoped lang="scss">
 @import "@/assets/variables.scss";
+
 .goods-info {
-  min-height: 600px;
+  width: 100vw;
   background: #fff;
 }
+
 .media {
-  width: 580px;
-  height: 600px;
+
 }
+
 .spec {
   flex: 1;
 }
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
+// .container {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// }
 </style>

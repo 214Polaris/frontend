@@ -10,7 +10,7 @@
             <li>
               <img :src="item.productLink" />
             </li>
-            <li class="introduce">{{ item.productName }}</li>
+            <li class="introduce">{{  item.productName }}</li>
             <li class="price">￥{{ item.productPrice }}</li>
           </ul>
         </router-link>
