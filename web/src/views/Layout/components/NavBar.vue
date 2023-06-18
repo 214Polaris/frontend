@@ -165,6 +165,10 @@ export default {
   padding-right: 7px;
 }
 
+.iconfont::before {
+  font-family: iconfont;
+}
+
 div img.logo {
   height: 60px;
   width: auto;

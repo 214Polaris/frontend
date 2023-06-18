@@ -80,7 +80,7 @@
 }
 
 .container .article {
-  width: 1000px;
+  width: 990px;
   background-color: #fff;
 }
 </style>

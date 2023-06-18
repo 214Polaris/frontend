@@ -1,19 +1,58 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, h } from "vue";
+import user from "@/static/user.json";
+import list from "@/static/goodsList.json";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 const addressDialogVisible = ref(false);
 const infoDialogVisible = ref(false);
+const passwordDialogVisible = ref(false);
 const form = ref({
+  account: "",
   name: "",
   phone: "",
   email: "",
   birthday: "",
   address: "",
 });
+const passForm = ref({
+  old_password: "",
+  new_password: "",
+  confirm_password: "",
+});
+const goodList = ref([]);
 
-onMounted(() => {});
+const getUser = () => {
+  form.value.account = user[0].account;
+  form.value.name = user[0].name;
+  form.value.phone = user[0].phone;
+  form.value.email = user[0].email;
+  form.value.birthday = user[0].birthday;
+  form.value.address = user[0].address;
+};
+
+const getgoodList = () => {
+  goodList.value = list;
+};
+
+//确认提交信息函数
+const infoConfirm = () => {
+  const succ = ref(false);
+  if (!succ) {
+  }
+};
+
+//确认提交密码修改函数
+const passConfirm = () => {};
+
+onMounted(() => {
+  getUser();
+  getgoodList();
+  console.log(goodList);
+});
 </script>
 
+with
 <template>
   <div class="home-overview">
     <!-- 用户信息 -->
@@ -30,13 +69,21 @@ onMounted(() => {});
           @click="
             () => {
               infoDialogVisible = true;
+              getUser();
             }
           "
         ></span>
         <p>个人信息</p>
       </a>
       <a href="javascript:;">
-        <span class="iconfont icon-setting"></span>
+        <span
+          class="iconfont icon-setting"
+          @click="
+            () => {
+              passwordDialogVisible = true;
+            }
+          "
+        ></span>
         <p>安全设置</p>
       </a>
       <a
@@ -47,24 +94,28 @@ onMounted(() => {});
           }
         "
       >
-        <span class="iconfont icon-address"></span>
+        <span
+          class="iconfont icon-address"
+          @click="
+            () => {
+              addressDialogVisible = true;
+            }
+          "
+        ></span>
         <p>地址管理</p>
       </a>
     </div>
   </div>
-  <div class="like-container">
-    <div class="home-panel">
-      <div class="header">
-        <h4 data-v-bcb266e0="">猜你喜欢</h4>
-      </div>
-    </div>
-  </div>
+  <!-- 修改个人信息窗口 -->
   <el-dialog v-model="infoDialogVisible" title="修改个人信息">
     <el-form v-model="form" label-width="100px">
       <el-form-item label="账号：">
-        <el-input v-model="form.name" autocomplete="off"></el-input>
+        <el-input v-model="form.account" autocomplete="off" disabled></el-input>
       </el-form-item>
       <el-form-item label="用户名：">
+        <el-input v-model="form.name"></el-input>
+      </el-form-item>
+      <el-form-item label="电话号码：">
         <el-input v-model.number="form.phone"></el-input>
       </el-form-item>
       <el-form-item label="邮箱：">
@@ -85,7 +136,53 @@ onMounted(() => {});
           autosize
         ></el-input>
       </el-form-item>
+      <el-form-item style="margin-left: 310px">
+        <el-button type="primary" @click="infoConfirm()">提交修改</el-button>
+        <el-button
+          @click="
+            () => {
+              infoDialogVisible = false;
+            }
+          "
+          >取消</el-button
+        >
+      </el-form-item>
     </el-form>
+    <!-- 修改密码窗口 -->
+  </el-dialog>
+  <el-dialog v-model="passwordDialogVisible" title="修改密码">
+    <el-form v-model="form" label-width="100px">
+      <el-form-item label="原密码：">
+        <el-input v-model="passForm.old_password" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="新密码：">
+        <el-input
+          v-model="passForm.new_password"
+          autocomplete="off"
+          type="password"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="确认密码：">
+        <el-input
+          v-model="passForm.confirm_password"
+          autocomplete="off"
+          type="password"
+          autosize
+        ></el-input>
+      </el-form-item>
+      <el-form-item style="margin-left: 310px">
+        <el-button type="primary" @click="passConfirm()">提交修改</el-button>
+        <el-button
+          @click="
+            () => {
+              passwordDialogVisible = false;
+            }
+          "
+          >取消</el-button
+        >
+      </el-form-item>
+    </el-form>
+    <!-- 修改地址窗口 -->
   </el-dialog>
   <el-dialog v-model="addressDialogVisible" title="修改地址">
     <el-form v-model="form" label-width="100px">
@@ -103,11 +200,50 @@ onMounted(() => {});
           autosize
         ></el-input>
       </el-form-item>
+      <el-form-item style="margin-left: 310px">
+        <el-button type="primary" @click="infoConfirm()">提交修改</el-button>
+        <el-button
+          @click="
+            () => {
+              addressDialogVisible = false;
+            }
+          "
+          >取消</el-button
+        >
+      </el-form-item>
     </el-form>
   </el-dialog>
+  <div class="like-container">
+    <div class="home-panel">
+      <div class="header">
+        <h4>猜你喜欢</h4>
+      </div>
+      <!-- <template> -->
+      <div class="total">
+        <div class="layer_good">
+          <div
+            class="recommend"
+            v-for="(item, index) in goodList.slice(0, 4)"
+            :key="index"
+          >
+            <router-link :to="{ name: 'Details', params: { goodId: item.id } }">
+              <ul>
+                <li class="img_li">
+                  <img :src="item.image" class="item_img" />
+                </li>
+                <li class="introduce">{{ item.introduce }}</li>
+                <li class="price">￥{{ item.price }}</li>
+              </ul>
+            </router-link>
+          </div>
+        </div>
+      </div>
+      <!-- </template> -->
+    </div>
+  </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .home-overview {
   height: 132px;
   background: url("../../../assets/memberBackground.jpg") no-repeat center /
@@ -157,6 +293,10 @@ onMounted(() => {});
   font-size: 36px;
 }
 
+.home-overview .item a .iconfont::before {
+  font-family: iconfont;
+}
+
 .home-overview .item a p {
   line-height: 32px;
 }
@@ -186,12 +326,68 @@ onMounted(() => {});
   font-weight: 400;
 }
 
-.home-panel .goods-list {
+.total {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 
-/* .el-input {
-  width: 300px;
-} */
+.layer_good {
+  display: flex;
+  flex-grow: 1;
+  margin-bottom: 64px;
+  align-content: stretch;
+  padding-left: 12px;
+}
+
+.recommend {
+  margin: 8px;
+  display: inline-block;
+}
+
+li {
+  list-style: none;
+}
+
+.recommend img {
+  height: 300px;
+  text-align: center;
+}
+
+.introduce {
+  color: black;
+  width: 170px;
+  text-align: center;
+  font-size: 12px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.price {
+  color: black;
+  width: 150px;
+  text-align: center;
+  font-size: 18px;
+  color: #f00;
+}
+ul {
+  width: 220px;
+  height: auto;
+  overflow: hidden;
+  padding: 0;
+  padding-right: 15px;
+}
+.img_li {
+  width: 220px;
+  height: 220px;
+  overflow: hidden;
+  .item_img {
+    position: relative;
+    margin: auto;
+    max-width: 200px;
+    max-height: 200px;
+    object-fit: cover;
+    box-shadow: 5px 5px 5px rgba(57, 56, 56, 0.5);
+  }
+}
 </style>
