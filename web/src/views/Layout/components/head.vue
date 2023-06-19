@@ -80,6 +80,10 @@ a {
   text-align: center;
 }
 
+.head-li a .iconfont {
+  font-family: iconfont;
+}
+
 .Head-container {
   width: auto;
   margin: 0;

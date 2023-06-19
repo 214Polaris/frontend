@@ -1,7 +1,7 @@
 <!--这里实现推荐商品列表-->
 <template>
   <div class="total">
-    <div class="layer">
+    <div class="layer_good">
       <div class="recommend" v-for="(item, index) in goodsList" :key="index">
         <router-link
           :to="{ name: 'Details', params: { goodId: item.productId } }"
@@ -49,7 +49,7 @@ export default {
   flex-wrap: wrap;
 }
 
-.layer {
+.layer_good {
   flex-grow: 1;
   margin-bottom: 64px;
 }

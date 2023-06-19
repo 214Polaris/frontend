@@ -112,6 +112,10 @@
         color: #666;
       }
 
+      .iconfont::before {
+        font-family: iconfont;
+      }
+
       &:hover {
         .iconfont {
           color: #27ba9b;
@@ -197,6 +201,10 @@
         vertical-align: middle;
         text-shadow: 0 0 1px #333;
       }
+    }
+
+    .iconfont::before {
+      font-family: iconfont;
     }
   }
 

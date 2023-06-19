@@ -135,6 +135,7 @@ export default {
       }
       //补充跳转到个人信息页面
       else {
+        this.$router.push({ path: "/member/" });
       }
     },
   },
@@ -162,6 +163,10 @@ export default {
 .iconfont {
   font-size: var(--el-button-font-weight);
   padding-right: 7px;
+}
+
+.iconfont::before {
+  font-family: iconfont;
 }
 
 div img.logo {

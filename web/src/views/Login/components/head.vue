@@ -40,5 +40,9 @@
       color: #000;
     }
   }
+
+  .iconfont::before {
+    font-family: iconfont;
+  }
 }
 </style>
