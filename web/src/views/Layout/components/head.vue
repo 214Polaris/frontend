@@ -1,6 +1,4 @@
-<script setup>
-const token = localStorage.token;
-</script>
+<script setup></script>
 
 <template>
   <div class="Head-container" v-if="token">

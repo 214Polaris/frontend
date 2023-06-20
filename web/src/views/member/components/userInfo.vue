@@ -1,20 +1,31 @@
 <script setup>
 import { onMounted, ref, h } from "vue";
-import user from "@/static/user.json";
 import list from "@/static/goodsList.json";
 import { ElMessage, ElMessageBox } from "element-plus";
+import axios from "axios";
 
 const addressDialogVisible = ref(false);
 const infoDialogVisible = ref(false);
 const passwordDialogVisible = ref(false);
+const userID = localStorage.getItem("userID");
 const form = ref({
   account: "",
-  name: "",
+  userName: "",
   phone: "",
   email: "",
   birthday: "",
   address: "",
+  realName: "",
 });
+const keyOfCheck = [
+  "account",
+  "userName",
+  "phone",
+  "email",
+  "birthday",
+  "address",
+  "realName",
+];
 const passForm = ref({
   old_password: "",
   new_password: "",
@@ -22,13 +33,32 @@ const passForm = ref({
 });
 const goodList = ref([]);
 
-const getUser = () => {
-  form.value.account = user[0].account;
-  form.value.name = user[0].name;
-  form.value.phone = user[0].phone;
-  form.value.email = user[0].email;
-  form.value.birthday = user[0].birthday;
-  form.value.address = user[0].address;
+const getUserInfo = () => {
+  console.log(userID);
+  axios({
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    method: "post",
+    url: "/api/showUser",
+    data: {
+      id: userID,
+    },
+  })
+    .then((response) => {
+      if (response.data.code === 200) {
+        form.value[mobile] = response.data.mobile;
+        form.value[address] = response.data.address;
+        form.value[userName] = response.data.userName;
+        form.value[email] = response.data.userEmail;
+        form.value[birthday] = response.data.userBornDate;
+        form.value[realName] = response.data.userRealName;
+      }
+    })
+    .catch(() => {
+      console.log("查询失败！");
+      ElMessage.error("Oops, this is a error message.");
+    });
 };
 
 const getgoodList = () => {
@@ -37,18 +67,59 @@ const getgoodList = () => {
 
 //确认提交信息函数
 const infoConfirm = () => {
-  const succ = ref(false);
-  if (!succ) {
-  }
+  axios({
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    method: "post",
+    url: "/api/Edit",
+    data: {
+      id: parseInt(userID),
+      mobile: form.value.phone,
+      address: form.value.address,
+      name: form.value.userName,
+      email: form.value.email,
+      bornDate: form.value.birthday,
+      realname: form.value.realName,
+    },
+  })
+    .then(() => {
+      ElMessage({
+        message: "修改成功！",
+        type: "success",
+      });
+    })
+    .catch(function () {
+      ElMessage.error("修改失败！");
+    });
 };
 
 //确认提交密码修改函数
 const passConfirm = () => {};
 
+const is_new = () => {
+  var _new = false;
+  for (const key of keyOfCheck) {
+    if (
+      form.value[key] == null ||
+      form.value[key] == undefined ||
+      !form.value[key]
+    ) {
+      _new = true;
+    }
+  }
+  if (_new) {
+    ElMessage({
+      message: "请尽快完善您的个人信息，帮助我们更好为您服务",
+      type: "warning",
+    });
+  }
+};
+
 onMounted(() => {
-  getUser();
+  getUserInfo();
   getgoodList();
-  console.log(goodList);
+  is_new();
 });
 </script>
 
@@ -60,7 +131,7 @@ with
       <div class="avatar">
         <img src="" />
       </div>
-      <h4>用户名</h4>
+      <h4>{{ form.userName }}</h4>
     </div>
     <div class="item">
       <a href="javascript:;">
@@ -69,7 +140,7 @@ with
           @click="
             () => {
               infoDialogVisible = true;
-              getUser();
+              getUserInfo();
             }
           "
         ></span>
@@ -99,6 +170,7 @@ with
           @click="
             () => {
               addressDialogVisible = true;
+              getUserInfo();
             }
           "
         ></span>
@@ -109,11 +181,8 @@ with
   <!-- 修改个人信息窗口 -->
   <el-dialog v-model="infoDialogVisible" title="修改个人信息">
     <el-form v-model="form" label-width="100px">
-      <el-form-item label="账号：">
-        <el-input v-model="form.account" autocomplete="off" disabled></el-input>
-      </el-form-item>
       <el-form-item label="用户名：">
-        <el-input v-model="form.name"></el-input>
+        <el-input v-model="form.userName"></el-input>
       </el-form-item>
       <el-form-item label="电话号码：">
         <el-input v-model.number="form.phone"></el-input>
@@ -186,8 +255,8 @@ with
   </el-dialog>
   <el-dialog v-model="addressDialogVisible" title="修改地址">
     <el-form v-model="form" label-width="100px">
-      <el-form-item label="姓名：">
-        <el-input v-model="form.name" autocomplete="off"></el-input>
+      <el-form-item label="收货姓名：">
+        <el-input v-model="form.realName" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="电话：">
         <el-input v-model.number="form.phone"></el-input>

@@ -156,8 +156,9 @@ export default {
           .then((response) => {
             console.log(response);
             if (response.data.code === 200) {
+              console.log(response.data.userID);
               this.$store.commit("SET_TOKEN", response.data.token);
-              this.$store.commit("GET_USER", response.data.user);
+              this.$store.commit("GET_USER", String(response.data.userID));
               console.log("登录成功！");
               this.$router.replace({ path: "/" });
             }
@@ -200,10 +201,10 @@ export default {
         })
           .then((response) => {
             if (response.data.code === 200) {
-              ElMessageBox.alert("注册成功！请登录").then(()=>{
+              ElMessageBox.alert("注册成功！请登录").then(() => {
                 location.reload();
-                this.$router.push({path:'/login'});
-              })
+                this.$router.push({ path: "/login" });
+              });
             }
           })
           .catch(function () {
@@ -318,5 +319,4 @@ export default {
   padding: 1%;
   font-size: 1.5vw;
 }
-
 </style>

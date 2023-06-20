@@ -2,7 +2,7 @@ import goodsList from "../static/goodsList.json";
 import { createStore } from "vuex";
 
 const state = {
-  user: window.sessionStorage.getItem("user"),
+  userID: window.sessionStorage.getItem("userID"),
   token: window.sessionStorage.getItem("token"),
   goodsList,
   is_login: false,
@@ -14,14 +14,14 @@ const mutations = {
     state.is_login = true;
   },
   GET_USER: (state, data) => {
-    state.user = data;
-    localStorage.setItem("user", data);
+    state.userID = data;
+    localStorage.setItem("userID", data);
   },
   LOGOUT: (state) => {
     state.token = null;
     state.user = null;
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.removeItem("userID");
   },
 };
 
