@@ -1,7 +1,6 @@
 package data
 
 import (
-	"fmt"
 	"gorm.io/gorm"
 	"system/model"
 )
@@ -29,8 +28,7 @@ type CartRepoInterface interface {
 func (repo *CartData) GetTotal(userID string) []*model.Cart {
 	var carts []*model.Cart
 	var count int64
-	repo.DB.Preload("Options").Where("userID = ?", userID).Find(&carts).Count(&count)
-	fmt.Print(carts[0].Options)
+	repo.DB.Where("userID = ?", userID).Find(&carts).Count(&count)
 	if count > 0 {
 		return carts
 	}
@@ -77,15 +75,10 @@ func (repo *CartData) Add(cart model.Cart) bool {
 	//先判断有没有该商品在购物车
 	if repo.Query(&cart) == true {
 		repo.DB.Model(&cart).
-			Where("id = ?", cart.ID).
+			Where("productID = ? and userID = ? and type1 = ? and type2 = ?", cart.ProductID, cart.UserID, cart.Type1, cart.Type2).
 			Update("productCount", gorm.Expr("productCount + ?", cart.ProductCount))
 	}
-	// 创建或更新 CartItem 的选项关联
-	var options []model.Option
-	for _, option := range cart.Options {
-		options = append(options, option)
-	}
-	repo.DB.Model(&cart).Association("Options").Replace(&options)
+	repo.DB.Model(&cart)
 	err := repo.DB.Create(cart)
 	if err != nil {
 		return false

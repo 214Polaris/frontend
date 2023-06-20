@@ -2,7 +2,6 @@ package service
 
 import (
 	"github.com/gin-gonic/gin"
-	"net/http"
 	"strconv"
 	"system/data"
 	"system/model"
@@ -25,18 +24,6 @@ type CartSrv interface {
 
 type CartService struct {
 	Repo data.CartRepoInterface
-}
-
-// 定义报文格式
-type CartRequest struct {
-	CartID       int            `json:"cartID" binding:"required"`
-	ProductID    string         `json:"productID" binding:"required"`
-	UserID       string         `json:"userID" binding:"required"`
-	ProductLink  string         `json:"productLink" binding:"required"`
-	ProductName  string         `json:"productName" binding:"required"`
-	ProductCount int            `json:"productCount" binding:"required"`
-	ProductPrice float32        `json:"productPrice" binding:"required"`
-	Options      []model.Option `json:"options" binding:"required"`
 }
 
 // 获取一个用户的全部记录
@@ -89,23 +76,25 @@ func (srv *CartService) Diminish(ctx *gin.Context) {
 
 // 增加商品
 func (srv *CartService) Add(ctx *gin.Context) {
-	var cartReq CartRequest
-	if err := ctx.ShouldBindJSON(&cartReq); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	// 创建或更新 CartItem
-	cartItem := model.Cart{
-		ID:           cartReq.CartID,
-		ProductID:    cartReq.ProductID,
-		UserID:       cartReq.UserID,
-		ProductLink:  cartReq.ProductLink,
-		ProductName:  cartReq.ProductName,
-		ProductCount: cartReq.ProductCount,
-		ProductPrice: cartReq.ProductPrice,
-		Options:      cartReq.Options,
-	}
-	if srv.Repo.Add(cartItem) == false {
+	var c model.Cart
+	c.ProductID = ctx.PostForm("productID")
+	c.UserID = ctx.PostForm("userID")
+	c.ProductLink = ctx.PostForm("productLink")
+	c.ProductName = ctx.PostForm("productName")
+	countStr := ctx.PostForm("productCount")
+	c.ProductCount, _ = strconv.Atoi(countStr)
+	priceStr := ctx.PostForm("productPrice")
+	price, _ := strconv.ParseFloat(priceStr, 64)
+	c.ProductPrice = float32(price)
+	c.OptionID1 = ctx.PostForm("option1_id")
+	c.Type1 = ctx.PostForm("type1")
+	c.Value1 = ctx.PostForm("value1")
+	c.ImageID = ctx.PostForm("image_id")
+	c.Url = ctx.PostForm("url")
+	c.OptionID2 = ctx.PostForm("option2_id")
+	c.Type2 = ctx.PostForm("type2")
+	c.Value2 = ctx.PostForm("value2")
+	if srv.Repo.Add(c) == false {
 		ctx.JSON(401, gin.H{"msg": "添加失败"})
 	}
 	ctx.JSON(200, gin.H{"msg": "添加成功"})

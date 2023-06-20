@@ -158,7 +158,7 @@ func (data *UserData) Edit(user model.User) bool {
 	if err := data.DB.Model(&user).
 		Where("id = ?", user.UserID).
 		Updates(map[string]interface{}{
-			"id":       user.UserID,
+			//"id":       user.UserID,
 			"mobile":   user.Mobile,
 			"address":  user.Address,
 			"name":     user.Username,
