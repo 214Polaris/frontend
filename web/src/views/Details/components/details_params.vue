@@ -174,7 +174,8 @@ import { ElMessageBox } from 'element-plus';
     GoodName: String,
     GoodIntroduce: String,
     GoodPrice: String,
-    GoodId: String
+    GoodId: String,
+    GoodLink:String
   });
   let price;
   //后端发来的商品参数
@@ -250,7 +251,9 @@ import { ElMessageBox } from 'element-plus';
       method: 'post',
       url: '/api/add',
       data: {
-        image:img,
+        productID:props.GoodId,
+        productLink:props.GoodLink,
+        
         options:opt,
         count:num.value
       },

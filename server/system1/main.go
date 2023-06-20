@@ -36,7 +36,6 @@ func main() {
 	r.POST("/api/Login", UserSrv.Login)
 	r.POST("/api/Register", UserSrv.Register)
 	r.POST("/api/Edit", UserSrv.Edit)
-	r.POST("/api/showUser", UserSrv.GetByID)
 	r.POST("/api/details", ProductSrc.GetByID)
 	r.POST("/api/details/info", ProductSrc.GetDetail)
 	r.POST("/api/cart", CartSrv.GetTotal)

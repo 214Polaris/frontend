@@ -15,6 +15,7 @@
               :GoodIntroduce="this.good.productIntro"
               :GoodPrice = "this.good.productPrice"
               :GoodId="this.good.productId"
+              :GoodLink="this.good.productLink"
               />
               </div>
             </div>
