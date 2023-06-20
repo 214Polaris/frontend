@@ -78,8 +78,10 @@ func (repo *CartData) Add(cart model.Cart) bool {
 			Where("productID = ? and userID = ? and type1 = ? and type2 = ?", cart.ProductID, cart.UserID, cart.Type1, cart.Type2).
 			Update("productCount", gorm.Expr("productCount + ?", cart.ProductCount))
 	}
-	repo.DB.Model(&cart)
-	err := repo.DB.Create(cart)
+	var count int64
+	repo.DB.Model(&cart).Count(&count)
+	cart.ID = int(count) + 1
+	err := repo.DB.Model(&cart).Create(cart).Error
 	if err != nil {
 		return false
 	}
