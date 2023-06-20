@@ -243,6 +243,8 @@ import { ElMessageBox } from 'element-plus';
     let opt_img = store.dataWithPic.option;
     let opt =  store.dataWithoutPic.option;
     let img = store.dataWithPic.image;
+    let user_id =localStorage.getItem("userID");
+    console.log("userid=",user_id);
     if(store.dataWithPic.image.URL!=null&&store.dataWithoutPic.option.Value!=null){
       axios({
       headers: {
@@ -251,11 +253,20 @@ import { ElMessageBox } from 'element-plus';
       method: 'post',
       url: '/api/add',
       data: {
+        userID:user_id,
         productID:props.GoodId,
         productLink:props.GoodLink,
-        
-        options:opt,
-        count:num.value
+        productPrice:parseFloat(price),
+        productCount:parseInt(num.value),
+        productName:props.GoodName,
+        option1_id:opt_img.ID,
+        type1:opt_img.Type,
+        value1:opt_img.Value,
+        image_id:img.ID,
+        url:img.URL,
+        option2_id:opt.ID,
+        type2:opt.Type,
+        value2:opt.Value,
       },
     })
       .then((response) => {
