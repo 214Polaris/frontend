@@ -82,7 +82,7 @@
           <el-button
             type="primary"
             class="btn-primary"
-            @click="register"
+            @click="register()"
             :loading="isSending"
           >
             注册
@@ -159,7 +159,6 @@ export default {
               this.$store.commit("SET_TOKEN", response.data.token);
               this.$store.commit("GET_USER", response.data.user);
               console.log("登录成功！");
-              location.reload();
               this.$router.replace({ path: "/" });
             }
           })
@@ -201,14 +200,10 @@ export default {
         })
           .then((response) => {
             if (response.data.code === 200) {
-              this.$store.commit("SET_TOKEN", response.data.token);
-              this.$store.commit("GET_USER", response.data.user);
-              this.$message({
-                message: "注册成功",
-                type: "success",
-              });
-              location.reload();
-              this.$router.replace({ path: "/" });
+              ElMessageBox.alert("注册成功！请登录").then(()=>{
+                location.reload();
+                this.$router.push({path:'/login'});
+              })
             }
           })
           .catch(function () {
@@ -237,8 +232,8 @@ export default {
   text-align: center;
   right: 10%;
   top: 20%;
-  height: 53%;
-  width: 20%;
+  height: 60%;
+  width: 25%;
   padding: 2%;
   border-radius: 4px;
   background-color: #fff;
@@ -311,8 +306,8 @@ export default {
   text-align: center;
   right: 10%;
   top: 14%;
-  height: 60%;
-  width: 20%;
+  height: 74%;
+  width: 25%;
   padding: 3%;
   border-radius: 4px;
   background-color: #fff;
@@ -323,4 +318,5 @@ export default {
   padding: 1%;
   font-size: 1.5vw;
 }
+
 </style>

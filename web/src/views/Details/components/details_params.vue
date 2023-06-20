@@ -2,11 +2,27 @@
   <main class="bg_gray">
     <div class="bg_white" style="text-align: center">
       <div class="container">
-        <div class="col-lg-12" style="width: 25vw">
+        <div class="col-lg-12" style="width: 30vw">
           <!--拿去商品信息后放在这里-->
           <div class="prod_options version_2">
             <h1 class="g-name" >{{ GoodName }}</h1>
             <p class="g-desc">{{ GoodIntroduce }}</p>
+            <el-divider />
+            <div class="row">
+              <label
+                class="col-xl-7 col-lg-5 col-md-6 col-6"
+                style="font-size: large"
+                ><strong>选项</strong> - 参数选择
+              </label>
+              <div
+                class="col-xl-5 col-lg-5 col-md-6 col-6"
+                style="padding-bottom: 10px"
+              >
+                <a href="#0" data-bs-toggle="modal" data-bs-target="#size-modal"
+                  ><i class="iconfont icon-arrow-double-right"></i
+                ></a>
+              </div>
+            </div>
             <el-divider />
             <div class="row">
               <label
@@ -105,43 +121,46 @@
 
 <script setup>
 import  axios  from 'axios'
-import { defineProps, onMounted, ref } from "vue";
-  //props处获取参数
+import { defineProps, onMounted, watch } from 'vue';
+
 const props = defineProps({
   GoodName: String,
   GoodIntroduce: String,
   GoodPrice: String,
-  GoodId : String
+  GoodId: String
 });
-  //获取详情信息
-  //mock用
-let goods=null
-//需要计算折扣
-let price = props.GoodPrice * 0.8
-const num = ref(1);
-//处理点击事件
-const handleChange=(num)=>{
+
+// 处理点击事件
+const handleChange = (num) => {
   console.log(num);
-}
-//mounted提前获取详情信息表
-onMounted(()=>{
+};
+
+onMounted(() => {
+  console.log(props.GoodId);
+});
+
+watch(() => props.GoodId, (newId, oldId) => {
+  console.log(newId);
+
   axios({
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      method: "post",
-      url: "/api/details/info",
-      data: {
-        good_id: props.GoodId,
-      },
-    })
-      .then((response) => {
-        goods = response.data;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    method: 'post',
+    url: '/api/details/info',
+    data: {
+      productID: newId,
+    },
   })
+    .then((response) => {
+      const goods = response.data;
+      console.log(goods);
+      // 执行其他逻辑
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
 </script>
 
 <style lang="scss" scoped>

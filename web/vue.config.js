@@ -3,13 +3,12 @@ const { defineConfig } = require("@vue/cli-service");
 module.exports = defineConfig({
   transpileDependencies: true,
   lintOnSave: false,
-  publicPath: "./",
 
   //设置build path
   outputDir: 'dist',
 
   devServer: {
-    // overlay: { // 让浏览器 overlay 同时显示警告和错误
+    // overlay: { // 让浏览p器 overlay 同时显示警告和错误
     //   warnings: true,
     //   errors: true
     // },

@@ -84,6 +84,7 @@ export default {
 </script>
 <style scoped lang="scss">
 .tb-booth {
+  top:5vw;
   width: 420px;
   height: 420px;
   position: relative;

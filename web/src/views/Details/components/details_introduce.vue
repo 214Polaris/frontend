@@ -47,35 +47,10 @@
                 aria-labelledby="heading-A"
               >
                 <div class="card-body">
-                  <div class="row justify-content-between">
+                  <div class="row justify-content-center">
                     <div class="col-lg-6">
                       <h3>商品详情</h3>
                       {{ GoodIntroduce }}
-                    </div>
-                    <div class="col-lg-5">
-                      <h3>参数</h3>
-                      <div class="table-responsive">
-                        <table class="table table-sm table-striped">
-                          <tbody>
-                            <tr>
-                              <td><strong>Color</strong></td>
-                              <td>Blue, Purple</td>
-                            </tr>
-                            <tr>
-                              <td><strong>Size</strong></td>
-                              <td>150x100x100</td>
-                            </tr>
-                            <tr>
-                              <td><strong>Weight</strong></td>
-                              <td>0.6kg</td>
-                            </tr>
-                            <tr>
-                              <td><strong>Manifacturer</strong></td>
-                              <td>Manifacturer</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
                       <!-- /table-responsive -->
                     </div>
                   </div>
