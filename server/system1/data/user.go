@@ -44,6 +44,8 @@ type UserRepoInterface interface {
 	GetID(user model.User) int
 	// 用id获取所有信息
 	GetByID(id int) *model.User
+	// 修改密码
+	EditPassword(id int, oldPass string, newPass string) int
 }
 
 // Query 查询
@@ -184,4 +186,23 @@ func (data *UserData) GetByID(id int) *model.User {
 		return nil
 	}
 	return &u
+}
+
+// 修改密码
+func (data *UserData) EditPassword(id int, oldPass string, newPass string) int {
+	var user model.User
+	if err := data.DB.Model(&user).Where("id = ?", id).Find(&user).Error; err != nil {
+		return 1
+	}
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(oldPass)); err != nil {
+		return 2
+	}
+	//密码加密
+	hasePassword, _ := bcrypt.GenerateFromPassword([]byte(newPass), bcrypt.DefaultCost)
+	//将加密后的密码赋给u.Password
+	user.Password = string(hasePassword)
+	if err := data.DB.Model(&user).Updates(&user).Error; err != nil {
+		return 3
+	}
+	return 0
 }

@@ -17,11 +17,10 @@ type OrderRepoInterface interface {
 	GetTotal(req *model.ListPage) (total int64, err error)
 	Get(Order model.Order) (*model.Order, error)
 	Exist(Order model.Order) *model.Order
-	ExistByOrderID(id string) *model.Order
+	GetOrders(id string) (pro []*model.Order)
 	Add(Order model.Order) (*model.Order, error)
 	Edit(Order model.Order) (bool, error)
 	GetUserOrders(id string) (pro []*model.Order)
-	Delete(u model.Order) (bool, error)
 }
 
 func (o *OrderData) List(req *model.ListPage) (Orders []*model.Order, err error) {
@@ -65,10 +64,13 @@ func (o *OrderData) Exist(order model.Order) *model.Order {
 	return nil
 }
 
-func (o *OrderData) ExistByOrderID(id string) *model.Order {
-	var order model.Order
-	o.DB.Where("order_id = ?", id).First(&order)
-	return &order
+func (o *OrderData) GetOrders(id string) (pro []*model.Order) {
+	var orders []*model.Order
+	db := o.DB
+	if err := db.Where("order_id = ?", id).Find(&orders).Error; err != nil {
+		return nil
+	}
+	return orders
 }
 
 func (o *OrderData) Add(order model.Order) (*model.Order, error) {
@@ -83,11 +85,8 @@ func (o *OrderData) Edit(order model.Order) (bool, error) {
 	if order.OrderId == "" {
 		return false, errors.New("请传入参数")
 	}
-	o1 := &model.Order{}
-	err := o.DB.Model(o1).Where("order_id=?", order.OrderId).Updates(map[string]interface{}{
-		//"mobile":       order.Mobile,
-		"pay_status": order.PayStatus,
-		//"user_address": order.UserAddress,
+	err := o.DB.Model(&order).Where("order_id=?", order.OrderId).Updates(map[string]interface{}{
+		"status": order.Status,
 	}).Error
 	if err != nil {
 		return false, err
@@ -102,14 +101,4 @@ func (o *OrderData) GetUserOrders(id string) (pro []*model.Order) {
 		return nil
 	}
 	return orders
-}
-
-func (o *OrderData) Delete(order model.Order) (bool, error) {
-	err := o.DB.Model(&order).
-		Where("order_id=?", order.OrderId).
-		Update("is_deleted", order.IsDeleted).Error
-	if err != nil {
-		return false, err
-	}
-	return true, nil
 }

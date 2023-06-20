@@ -7,6 +7,7 @@ import (
 	"github.com/go-pay/gopay"
 	"github.com/go-pay/gopay/alipay"
 	"github.com/go-pay/gopay/pkg/xlog"
+	_ "github.com/go-sql-driver/mysql"
 	"net/http"
 	"strings"
 	"system/config"
@@ -16,40 +17,49 @@ import (
 )
 
 type OrderSrv interface {
-	GetUserOrders(ctx *gin.Context)
+	GetUserOrders(c *gin.Context)
 	AliPayNotify(c *gin.Context)
 	AliPayReturn(c *gin.Context)
+	CreateOrder(c *gin.Context)
 	Alipay(c *gin.Context)
+	CancelOrder(c *gin.Context)
 }
 
 type OrderService struct {
 	Repo data.OrderRepoInterface
 }
 
+// 根据用户id获取订单
 func (srv *OrderService) GetUserOrders(c *gin.Context) {
 	var o model.Order
-	o.OrderId = c.PostForm("orderId")
+	o.UserId = c.PostForm("userID")
 
-	orders := srv.Repo.GetUserOrders(o.OrderId)
+	orders := srv.Repo.GetUserOrders(o.UserId)
 	if orders == nil {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{"code": 422, "msg": "获取用户订单失败"})
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
+			"msg":        "获取用户订单失败",
+			"entitylist": orders,
+		})
 		return
 	}
-	c.JSON(200, orders)
+	c.JSON(http.StatusOK, gin.H{
+		"msg":        "获取用户订单成功",
+		"entitylist": orders,
+	})
 }
 
-// 支付宝支付状态识别和Todo业务 需要post orderId用于订单检索和更新
+// 支付宝支付页面使用 支付状态识别和Todo业务 需要post orderId用于订单检索和更新 trade_status是支付宝环境自带的
 func (srv *OrderService) AliPayNotify(c *gin.Context) {
 	var o model.Order
 	o.OrderId = c.PostForm("orderId")
 	tradeStatus := c.PostForm("trade_status")
 
-	order := srv.Repo.ExistByOrderID(o.OrderId)
-	if order == nil {
+	orders := srv.Repo.GetOrders(o.OrderId)
+	if orders == nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
-			"code": 422,
-			"msg":  "找不到该订单",
+			"msg": "找不到该订单",
 		})
+		return
 	}
 
 	// 支付页面关闭
@@ -62,17 +72,21 @@ func (srv *OrderService) AliPayNotify(c *gin.Context) {
 	// 支付成功
 	if tradeStatus == "TRADE_SUCCESS" {
 		//做自己的业务
-		//更新订单支付
-		order.PayStatus = "已支付"
-		_, err := srv.Repo.Edit(*order)
-		if err != nil {
-			c.JSON(http.StatusUnprocessableEntity, gin.H{
-				"code": 422,
-				"msg":  "订单状态更新失败",
-			})
+		//更新订单支付状态
+		for _, ors := range orders {
+			ors.Status = 2
+			_, err := srv.Repo.Edit(*ors)
+			if err != nil {
+				xlog.Error(err)
+				c.JSON(http.StatusUnprocessableEntity, gin.H{
+					"msg": "订单取消失败！",
+				})
+				return
+			}
 		}
+
 		c.JSON(http.StatusOK, gin.H{
-			"msg": "交易成功！",
+			"msg": "订单支付成功！",
 		})
 	}
 }
@@ -94,7 +108,7 @@ func (srv *OrderService) AliPayReturn(c *gin.Context) {
 	if err != nil {
 		xlog.Error(err)
 		c.JSON(http.StatusBadRequest, gin.H{
-			"msg": "参数错误",
+			"msg": "验签时参数错误",
 		})
 		return
 	}
@@ -110,24 +124,64 @@ func (srv *OrderService) AliPayReturn(c *gin.Context) {
 	})
 }
 
-// 支付宝页面设置、url获取、订单创建 post：订单id，用户id，客服电话，总金额，收件地址
-func (srv *OrderService) Alipay(c *gin.Context) {
-	var o model.Order
+// 创建订单 需要post整个model.order中OrderTemp的属性 按数组形式切片获取
+func (srv *OrderService) CreateOrder(c *gin.Context) {
+	var entitylist []model.OrderTemp
+	if err := c.ShouldBind(&entitylist); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"msg": "获取实体失败，不能生成订单！",
+		})
+		return
+	}
+
+	// 生成order_id、create_time, state设为1
 	// 订单号获取 时间戳表示
 	ts := time.Now().UnixMilli()
 	outTradeNo := fmt.Sprintf("%d", ts)
-	o.OrderId = outTradeNo
-	o.UserId = c.PostForm("userId")
-	o.Mobile = c.PostForm("mobile")
+	// 创建时间获取
+	timeStr := time.Now().Format("2006-01-02 15:04:05") //当前时间的字符串，2006-01-02 15:04:05据说是golang的诞生时间，固定写法
+
+	// 创建订单
+	for _, ot := range entitylist {
+		var on model.Order
+		on.OrderId = outTradeNo
+		on.UserId = ot.UserId
+		on.ProductId = ot.ProductId
+		on.ProductNum = ot.ProductNum
+		on.TotalPrice = ot.TotalPrice
+		on.Status = 1
+		on.CreateTime = timeStr
+		on.Mobile = ot.Mobile
+		on.UserAddress = ot.UserAddress
+		_, err := srv.Repo.Add(on)
+		if err != nil {
+			xlog.Error(err)
+			c.JSON(http.StatusUnprocessableEntity, gin.H{
+				"msg": "订单创建失败！",
+			})
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"msg": "订单创建完成！",
+	})
+}
+
+// 支付宝页面设置 订单创建和支付登录界面url创建  post：用户id，总金额，订单id
+func (srv *OrderService) Alipay(c *gin.Context) {
+	var o model.Order
+	// 订单号获取 时间戳表示
+	o.OrderId = c.PostForm("orderId")
+	o.UserId = c.PostForm("userID")
 	o.TotalPrice = c.GetInt64("totalPrice")
-	o.PayStatus = "未支付"
-	o.UserAddress = c.PostForm("userAddress")
 	//获取url进行支付
 	client, err := alipay.NewClient(config.AppId, config.PrivateKey, config.IsProduction)
 	if err != nil {
 		xlog.Error(err)
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
-			"msg": "client初始化失败",
+			"msg":    "client初始化失败",
+			"payUrl": "",
 		})
 		return
 	}
@@ -137,10 +191,10 @@ func (srv *OrderService) Alipay(c *gin.Context) {
 		SetReturnUrl(config.ReturnURL)
 
 	bm := make(gopay.BodyMap)
-	// 支付标题 可以改成用户名
+	// 支付标题 用户名
 	bm.Set("subject", o.UserId)
-	// 支付账单号 这里用时间戳
-	bm.Set("out_trade_no", outTradeNo)
+	// 支付账单号
+	bm.Set("out_trade_no", o.OrderId)
 	// 支付金额
 	bm.Set("total_amount", o.TotalPrice)
 	bm.Set("product_code", config.ProductCode)
@@ -149,7 +203,8 @@ func (srv *OrderService) Alipay(c *gin.Context) {
 	if err != nil {
 		xlog.Error(err)
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
-			"msg": "payurl初始化失败",
+			"msg":    "payurl创建失败",
+			"payUrl": "",
 		})
 		return
 	}
@@ -161,13 +216,32 @@ func (srv *OrderService) Alipay(c *gin.Context) {
 	editpayurl[2] = "openapi.alipaydev.com/"
 
 	endpayurl := strings.Join(editpayurl, "")
-	fmt.Println("payurl: " + endpayurl)
-	o.PayUrl = endpayurl
-
-	// 创建订单
-	srv.Repo.Add(o)
+	//fmt.Println("payurl: " + endpayurl)
 
 	c.JSON(http.StatusOK, gin.H{
-		"msg": "成功生成订单",
+		"msg":    "成功生成支付订单",
+		"payUrl": endpayurl,
+	})
+}
+
+// 用户取消订单 根据订单号修改订单信息
+func (srv *OrderService) CancelOrder(c *gin.Context) {
+	var o model.Order
+	o.OrderId = c.PostForm("orderId")
+
+	orders := srv.Repo.GetUserOrders(o.OrderId)
+	for _, ors := range orders {
+		ors.Status = 6
+		_, err := srv.Repo.Edit(*ors)
+		if err != nil {
+			xlog.Error(err)
+			c.JSON(http.StatusUnprocessableEntity, gin.H{
+				"msg": "订单取消失败！",
+			})
+			return
+		}
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"msg": "订单取消完成",
 	})
 }

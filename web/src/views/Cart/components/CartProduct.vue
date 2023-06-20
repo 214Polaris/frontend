@@ -20,137 +20,79 @@
                     <table class="table table-striped cart-list">
                         <thead>
                             <tr>
-                                <th>
+                                <th style="width: 50px;vertical-align: center;"><el-checkbox v-model="selectAll"
+                                        @change="selectAllItems">全选</el-checkbox></th>
+                                <th style="width:50%;text-align: center;">
                                     商品
                                 </th>
                                 <th>
                                     单价
                                 </th>
-                                <th>
+                                <th style="text-align: center; width:10%">
                                     数量
                                 </th>
-                                <th>
+                                <th style="padding-left: 5vw; width: 20%;">
                                     总价
-                                </th>
-                                <th>
-
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <div v-for="(item,index) in cartlist" :key="index">
-                            <tr>
-                                <td>
-                                    <div class="thumb_cart">
-                                        <img :src="item.image.URL"
-                                            data-src="item.image.URL" class="lazy" alt="Image">
-                                    </div>
-                                    <span class="item_cart">{{item.productName}}</span>
-                                </td>
-                                <td>
-                                    <strong>{{productPrice}}</strong>
-                                </td>
-                                <td>
-                                    <div class="numbers-row">
-                                        <input type="text" value="1" id="quantity_1" class="qty2" name="quantity_1">
-                                        <div class="inc button_inc">+</div>
-                                        <div class="dec button_inc">-</div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <strong>$140.00</strong>
-                                </td>
-                                <td class="options">
-                                    <a href="#"><i class="ti-trash"></i></a>
-                                </td>
+                            <tr v-if="cartlist.length === 0">
+                                <td colspan="6" class="text-center">购物车为空</td>
                             </tr>
-                        </div>
-                            <tr>
-                                <td>
-                                    <div class="thumb_cart">
-                                        <img src="img/products/product_placeholder_square_small.jpg"
-                                            data-src="img/products/shoes/2.jpg" class="lazy" alt="Image">
-                                    </div>
-                                    <span class="item_cart">Armor Okwahn II</span>
+                            <tr v-else v-bind="item" v-for="(item, index) in cartlist" :key="index">
+                                <td align="center">
+                                    <!-- 添加选择框 -->
+                                    <el-checkbox v-model="item.selected"></el-checkbox>
                                 </td>
                                 <td>
-                                    <strong>$110.00</strong>
+                                    <router-link :to="{ name: 'Details', params: { goodId: item.productID } }">
+                                        <div class="thumb_cart">
+                                            <img :src="item.productLink" :data-src="item.productLink" class="lazy"
+                                                alt="Image" />
+                                        </div>
+                                        <span class="item_cart" style="margin-top: 5px;">{{ item.productName }} <br /><br />
+                                            <div style="text-align: left;"> {{ item.value1 }} + {{ item.value2 }}</div>
+                                        </span>
+                                    </router-link>
                                 </td>
                                 <td>
-                                    <div class="numbers-row">
-                                        <input type="text" value="1" id="quantity_2" class="qty2" name="quantity_2">
-                                        <div class="inc button_inc">+</div>
-                                        <div class="dec button_inc">-</div>
-                                    </div>
+                                    <strong>{{ item.productPrice }}</strong>
                                 </td>
                                 <td>
-                                    <strong>$110.00</strong>
+                                    <el-input-number size="small" v-model="item.productCount" :min="1"
+                                        :id="'quantity_' + item.productCount"
+                                        :name="'quantity_' + item.productCount"></el-input-number>
+                                </td>
+                                <td style="padding-left: 5.5vw">
+                                    <strong>{{ item.productPrice * item.productCount }}</strong>
                                 </td>
                                 <td class="options">
-                                    <a href="#"><i class="ti-trash"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="thumb_cart">
-                                        <img src="img/products/product_placeholder_square_small.jpg"
-                                            data-src="img/products/shoes/3.jpg" class="lazy" alt="Image">
-                                    </div>
-                                    <span class="item_cart">Armor Air Wildwood ACG</span>
-                                </td>
-                                <td>
-                                    <strong>$90.00</strong>
-                                </td>
-
-                                <td>
-                                    <div class="numbers-row">
-                                        <input type="text" value="1" id="quantity_3" class="qty2" name="quantity_3">
-                                        <div class="inc button_inc">+</div>
-                                        <div class="dec button_inc">-</div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <strong>$90.00</strong>
-                                </td>
-                                <td class="options">
-                                    <a href="#"><i class="ti-trash"></i></a>
+                                    <a href="#" @click="deleteItem(index)"><i class="ti-trash"></i></a>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-
                     <div class="row add_top_30 flex-sm-row-reverse cart_actions">
-                        <div class="col-sm-4 text-end">
-                            <button type="button" class="btn_1 gray">Update Cart</button>
-                        </div>
-                        <div class="col-sm-8">
-                            <div class="apply-coupon">
-                                <div class="form-group">
-                                    <div class="row g-2">
-                                        <div class="col-md-6"><input type="text" name="coupon-code" value=""
-                                                placeholder="Promo code" class="form-control"></div>
-                                        <div class="col-md-4"><button type="button" class="btn_1 outline">Apply
-                                                Coupon</button></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                    <!-- /cart_actions -->
-
                 </div>
                 <!-- /container -->
-
-                <div class="box_cart">
-                    <div class="container">
-                        <div class="row justify-content-end">
-                            <div class="col-xl-4 col-lg-4 col-md-6">
-                                <ul>
-                                    <li>
-                                        <span>Total</span> $247.00
-                                    </li>
-                                </ul>
-                                <a href="cart-2.html" class="btn_1 full-width cart">Proceed to Checkout</a>
+                <div class="box_cart fixed-bottom">
+                    <div class="box_cart">
+                        <div class="container">
+                            <div class="row justify-content-end">
+                                <div class="col-xl-4 col-lg-4 col-md-6">
+                                    <ul>
+                                        <li>
+                                            <span>已选商品数：</span>{{ selectedItemCount }}
+                                        </li>
+                                        <li>
+                                            <span>总计</span> ${{ calculateTotal() }}
+                                        </li>
+                                    </ul>
+                                    <!-- 添加提交支付按钮 -->
+                                    <button type="button" class="btn_1 full-width cart" @click="submitPayment">确认支付</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -164,23 +106,89 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
-let cartlist = []
+import axios from 'axios';
+import { onMounted, ref, computed } from 'vue';
+let cartlist = ref([]);
 //获取购物车内容
 onMounted(() => {
+    let id = localStorage.getItem("userID");
     axios({
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        method: 'get',
+        method: 'post',
         url: '/api/cart',
+        data: {
+            userID: id
+        }
     })
         .then((response) => {
-            cartlist = response.data;
+            cartlist.value = response.data;
             console.log(cartlist)
         })
         .catch((error) => {
             console.error(error);
         });
 });
+
+// 计算总费用
+function calculateTotal() {
+    let total = 0;
+    for (const item of cartlist.value) {
+        if (item.selected) {
+            total += item.productPrice * item.productCount;
+        }
+    }
+    return total.toFixed(2); // 保留两位小数
+}
+
+// 提交支付
+function submitPayment() {
+    const selectedItems = cartlist.value.filter((item) => item.selected);
+    // 执行支付操作，你可以在这里调用支付接口或执行其他支付相关的操作
+    console.log('Selected items:', selectedItems);
+    console.log('Total amount:', calculateTotal());
+}
+
+// 计算已选商品的数量
+const selectedItemCount = computed(() => {
+    let count = 0;
+    for (const item of cartlist.value) {
+        if (item.selected) {
+            count += item.productCount;
+        }
+    }
+    return count;
+});
+//单个删除
+function deleteItem(index) {
+    const itemToDelete = cartlist.value[index];
+    let cartid = itemToDelete.cartID;
+    axios({
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        method: 'post',
+        url: '/api/delete',
+        data: {
+            cartID: cartid
+        }
+    })
+        .then((response) => {
+            console.log('Deleting item:', itemToDelete);
+            cartlist.value.splice(index, 1);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+}
+
+//全选按钮
+let selectAll = ref(false);
+function selectAllItems() {
+    for (const item of cartlist.value) {
+        item.selected = selectAll.value;
+    }
+}
+
 </script>

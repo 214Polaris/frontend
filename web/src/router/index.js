@@ -4,6 +4,7 @@ import Home from "../views/home/index";
 import Details from "../views/Details/index.vue";
 import Layout from "../views/Layout/index";
 import Member from "@/views/member/index.vue";
+import cart from "@/views/Cart/index.vue"
 import UserInfo from "@/views/member/components/userInfo.vue";
 import userOrder from "@/views/member/components/userOrder.vue";
 import { createRouter, createWebHashHistory } from "vue-router";
@@ -49,6 +50,15 @@ const routes = [
         },
         component: Details,
       },
+      //购物车
+      {
+        path: "cart",
+        name: "cart",
+        meta: {
+          requireAuth: true,
+        },
+        component: cart,
+      }
     ],
   },
   {

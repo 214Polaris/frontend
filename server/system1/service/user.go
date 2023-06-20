@@ -17,6 +17,7 @@ type UserSrv interface {
 	HandleRequest(c *gin.Context)
 	Edit(ctx *gin.Context)
 	GetByID(ctx *gin.Context)
+	EditPassword(ctx *gin.Context)
 }
 
 type UserService struct {
@@ -131,4 +132,25 @@ func (srv *UserService) GetByID(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(200, u)
+}
+
+func (srv *UserService) EditPassword(ctx *gin.Context) {
+	idStr := ctx.PostForm("id")
+	id, _ := strconv.Atoi(idStr)
+	oldPass := ctx.PostForm("oldPass")
+	newPass := ctx.PostForm("newPass")
+	num := srv.Repo.EditPassword(id, oldPass, newPass)
+	if num == 1 {
+		ctx.JSON(401, gin.H{"msg": "数据库无该账号"})
+		return
+	}
+	if num == 2 {
+		ctx.JSON(402, gin.H{"msg": "原密码不正确"})
+		return
+	}
+	if num == 3 {
+		ctx.JSON(403, gin.H{"msg": "修改失败"})
+		return
+	}
+	ctx.JSON(200, gin.H{"msg": "修改成功"})
 }
