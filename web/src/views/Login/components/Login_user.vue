@@ -119,8 +119,9 @@ export default {
           .then((response) => {
             console.log(response);
             if (response.data.code === 200) {
+              console.log(response.data.userID);
               this.$store.commit("SET_TOKEN", response.data.token);
-              this.$store.commit("GET_USER", response.data.user);
+              this.$store.commit("GET_USER", String(response.data.userID));
               console.log("登录成功！");
               this.$router.replace({ path: "/" });
             }
