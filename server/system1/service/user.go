@@ -16,6 +16,7 @@ type UserSrv interface {
 	Register(ctx *gin.Context)
 	HandleRequest(c *gin.Context)
 	Edit(ctx *gin.Context)
+	GetByID(ctx *gin.Context)
 }
 
 type UserService struct {
@@ -105,11 +106,10 @@ func (srv *UserService) Edit(ctx *gin.Context) {
 	//获取各种信息
 	var u model.User
 	UserIDStr := ctx.PostForm("id")
-	UserID, _ := strconv.Atoi(UserIDStr)
-	u.UserID = UserID
+	u.UserID, _ = strconv.Atoi(UserIDStr)
 	//fmt.Print(u.UserID)
 	u.Mobile = ctx.PostForm("mobile")
-	u.Password = ctx.PostForm("password")
+	//u.Password = ctx.PostForm("password")
 	u.Address = ctx.PostForm("address")
 	u.Username = ctx.PostForm("name")
 	u.UserEmail = ctx.PostForm("email")
@@ -120,4 +120,15 @@ func (srv *UserService) Edit(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(200, gin.H{"msg": "修改成功"})
+}
+
+func (srv *UserService) GetByID(ctx *gin.Context) {
+	UserIDStr := ctx.PostForm("id")
+	id, _ := strconv.Atoi(UserIDStr)
+	u := srv.Repo.GetByID(id)
+	if u == nil {
+		ctx.JSON(401, gin.H{"msg": "查找失败"})
+		return
+	}
+	ctx.JSON(200, u)
 }

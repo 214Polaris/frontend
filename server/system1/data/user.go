@@ -42,6 +42,8 @@ type UserRepoInterface interface {
 	Edit(user model.User) bool
 	// 获取ID
 	GetID(user model.User) int
+	// 用id获取所有信息
+	GetByID(id int) *model.User
 }
 
 // Query 查询
@@ -143,17 +145,29 @@ func (data *UserData) ExistByMobile(mobile string) *model.User {
 }
 
 func (data *UserData) Edit(user model.User) bool {
-	//密码加密
-	hasePassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
-	if err != nil {
-		fmt.Println(2)
-		return false
-	}
-	//将加密后的密码赋给u.Password
-	user.Password = string(hasePassword)
+	////密码加密
+	//hasePassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	//if err != nil {
+	//	fmt.Println(2)
+	//	return false
+	//}
+	////将加密后的密码赋给u.Password
+	//user.Password = string(hasePassword)
 	//更新操作
 	fmt.Println(user)
-	if err := data.DB.Model(&user).Where("id = ?", user.UserID).Updates(&user).Error; err != nil {
+	if err := data.DB.Model(&user).
+		Where("id = ?", user.UserID).
+		Updates(map[string]interface{}{
+			"id":       user.UserID,
+			"mobile":   user.Mobile,
+			"address":  user.Address,
+			"name":     user.Username,
+			"email":    user.UserEmail,
+			"bornDate": user.UserBornDate,
+			"realName": user.UserRealName,
+			// 排除密码字段
+			// "password": user.Password,
+		}).Error; err != nil {
 		return false
 	}
 	return true
@@ -162,4 +176,12 @@ func (data *UserData) Edit(user model.User) bool {
 func (data *UserData) GetID(user model.User) int {
 	DBuser, _ := data.Get(user)
 	return DBuser.UserID
+}
+
+func (data *UserData) GetByID(id int) *model.User {
+	var u model.User
+	if err := data.DB.Where("id = ?", id).Find(&u).Error; err != nil {
+		return nil
+	}
+	return &u
 }
