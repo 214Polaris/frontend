@@ -97,6 +97,7 @@
     dt {
       line-height: 1;
       font-size: 18px;
+      padding-top: 20px;
     }
 
     dd {
