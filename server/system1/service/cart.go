@@ -77,6 +77,8 @@ func (srv *CartService) Diminish(ctx *gin.Context) {
 // 增加商品
 func (srv *CartService) Add(ctx *gin.Context) {
 	var c model.Cart
+	//idStr := ctx.PostForm("cartID")
+	//c.ID, _ = strconv.Atoi(idStr)
 	c.ProductID = ctx.PostForm("productID")
 	c.UserID = ctx.PostForm("userID")
 	c.ProductLink = ctx.PostForm("productLink")
