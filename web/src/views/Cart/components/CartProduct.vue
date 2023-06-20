@@ -38,16 +38,17 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <div v-for="(item,index) in cartlist" :key="index">
                             <tr>
                                 <td>
                                     <div class="thumb_cart">
-                                        <img src="../../../../public/img/products/product_placeholder_square_small.jpg"
-                                            data-src="img/products/shoes/1.jpg" class="lazy" alt="Image">
+                                        <img :src="item.image.URL"
+                                            data-src="item.image.URL" class="lazy" alt="Image">
                                     </div>
-                                    <span class="item_cart">Armor Air x Fear</span>
+                                    <span class="item_cart">{{item.productName}}</span>
                                 </td>
                                 <td>
-                                    <strong>$140.00</strong>
+                                    <strong>{{productPrice}}</strong>
                                 </td>
                                 <td>
                                     <div class="numbers-row">
@@ -63,6 +64,7 @@
                                     <a href="#"><i class="ti-trash"></i></a>
                                 </td>
                             </tr>
+                        </div>
                             <tr>
                                 <td>
                                     <div class="thumb_cart">
@@ -145,24 +147,40 @@
                             <div class="col-xl-4 col-lg-4 col-md-6">
                                 <ul>
                                     <li>
-                                        <span>Subtotal</span> $240.00
-                                    </li>
-                                    <li>
-                                        <span>Shipping</span> $7.00
-                                    </li>
-                                    <li>
                                         <span>Total</span> $247.00
                                     </li>
                                 </ul>
                                 <a href="cart-2.html" class="btn_1 full-width cart">Proceed to Checkout</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- /box_cart -->
+                <!-- /box_cart -->
 
-        </main>
-        <!--/main-->
-    </div>
-</body>
+            </main>
+            <!--/main-->
+        </div>
+    </body>
 </template>
+
+<script setup>
+import { onMounted } from 'vue';
+let cartlist = []
+//获取购物车内容
+onMounted(() => {
+    axios({
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        method: 'get',
+        url: '/api/cart',
+    })
+        .then((response) => {
+            cartlist = response.data;
+            console.log(cartlist)
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+});
+</script>

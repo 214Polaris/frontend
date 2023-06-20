@@ -34,7 +34,7 @@
                 <label
                   class="col-xl-7 col-lg-5 col-md-6 col-6"
                   style="font-size: large"
-                  ><strong>选项</strong> - 大小选择
+                  ><strong>选项</strong> - 类型选择
                 </label>
                 <div
                   class="col-xl-5 col-lg-5 col-md-6 col-6"
@@ -165,7 +165,7 @@
   import  axios  from 'axios'
 import { ElMessageBox } from 'element-plus';
   import { defineProps, ref, watch, reactive } from 'vue';
-
+  
   //选择的参数
   let selectedparams = null;
   let selectedsize = null;
@@ -239,20 +239,26 @@ import { ElMessageBox } from 'element-plus';
 
   //加入购物车
   function addCart(){
+    let opt_img = store.dataWithPic.option;
+    let opt =  store.dataWithoutPic.option;
+    let img = store.dataWithPic.image;
     if(store.dataWithPic.image.URL!=null&&store.dataWithoutPic.option.Value!=null){
       axios({
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       method: 'post',
-      url: '/api/addCart',
+      url: '/api/add',
       data: {
-        data:store,
-        num:num
+        image:img,
+        options:opt,
+        count:num.value
       },
     })
       .then((response) => {
-        ElMessageBox.alert("已加入购物车！")
+        ElMessageBox.alert("已加入购物车！",{
+        showClose: false
+      })
         // 执行其他逻辑
       })
       .catch((error) => {
@@ -261,7 +267,9 @@ import { ElMessageBox } from 'element-plus';
       });
     }
     else{
-      ElMessageBox.alert("请选择参数！")
+      ElMessageBox.alert("请选择参数！",{
+        showClose: false
+      })
     }
   }
   </script>

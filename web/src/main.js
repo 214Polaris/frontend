@@ -5,7 +5,6 @@ import store from "./store/index";
 import axios from "./http";
 import installElementPlus from "./plugins/element";
 import ElementPlus from "element-plus";
-import "element-plus/lib/theme-chalk/index.css";
 const app = createApp(App);
 app.config.globalProperties.$axios = axios;
 installElementPlus(app);

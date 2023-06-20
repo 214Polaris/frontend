@@ -6,33 +6,16 @@
         <form>
           <div class="form-group">
             <label>用户名</label>
-            <input
-              type="text"
-              class="form-control"
-              v-model.trim="username"
-              placeholder="请输入用户名"
-              autocomplete="off"
-            />
+            <input type="text" class="form-control" v-model.trim="username" placeholder="请输入用户名" autocomplete="off" />
             <div v-if="!isUsernameValid" class="invalid-feedback">
               用户名长度应在5到12个字符之间。
             </div>
           </div>
           <div class="form-group">
             <label>密码</label>
-            <input
-              type="password"
-              class="form-control"
-              v-model.trim="password"
-              placeholder="请输入密码"
-              autocomplete="off"
-            />
+            <input type="password" class="form-control" v-model.trim="password" placeholder="请输入密码" autocomplete="off" />
           </div>
-          <el-button
-            type="primary"
-            class="btn-primary"
-            @click="login"
-            :loading="isSending"
-          >
+          <el-button type="primary" class="btn-primary" @click="login" :loading="isSending">
             登录
           </el-button>
           <div class="form-group mt-3">
@@ -45,46 +28,26 @@
         <form>
           <div class="form-group">
             <label>用户名</label>
-            <input
-              type="text"
-              class="form-control"
-              v-model.trim="registerUsername"
-              placeholder="请输入用户名"
-              autocomplete="off"
-            />
+            <input type="text" class="form-control" v-model.trim="registerUsername" placeholder="请输入用户名"
+              autocomplete="off" />
             <div v-if="!isRegisterUsernameValid" class="invalid-feedback">
               用户名长度应在5到12个字符之间。
             </div>
           </div>
           <div class="form-group">
             <label>密码</label>
-            <input
-              type="password"
-              class="form-control"
-              v-model.trim="registerPassword"
-              placeholder="请输入密码"
-              autocomplete="off"
-            />
+            <input type="password" class="form-control" v-model.trim="registerPassword" placeholder="请输入密码"
+              autocomplete="off" />
           </div>
           <div class="form-group">
             <label>确认密码</label>
-            <input
-              type="password"
-              class="form-control"
-              v-model.trim="confirmPassword"
-              placeholder="请确认密码"
-              autocomplete="off"
-            />
+            <input type="password" class="form-control" v-model.trim="confirmPassword" placeholder="请确认密码"
+              autocomplete="off" />
             <div v-if="!isConfirmPasswordValid" class="invalid-feedback">
               两次输入的密码不一致。
             </div>
           </div>
-          <el-button
-            type="primary"
-            class="btn-primary"
-            @click="register()"
-            :loading="isSending"
-          >
+          <el-button type="primary" class="btn-primary" @click="register()" :loading="isSending">
             注册
           </el-button>
           <div class="form-group mt-3">
@@ -163,7 +126,9 @@ export default {
             }
           })
           .catch(function () {
-            ElMessageBox.alert("您输入的账号或密码错误").then(() => {
+            ElMessageBox.alert("您输入的账号或密码错误", {
+              showClose: false
+            }).then(() => {
               location.reload();
               this.$router.go(0);
             });
@@ -200,14 +165,18 @@ export default {
         })
           .then((response) => {
             if (response.data.code === 200) {
-              ElMessageBox.alert("注册成功！请登录").then(()=>{
+              ElMessageBox.alert("注册成功！请登录", {
+                showClose: false
+              }).then(() => {
                 location.reload();
-                this.$router.push({path:'/login'});
+                this.$router.push({ path: '/login' });
               })
             }
           })
           .catch(function () {
-            ElMessageBox.alert("用户已存在！").then(() => {
+            ElMessageBox.alert("用户已存在！", {
+              showClose: false
+            }).then(() => {
               location.reload();
               this.$router.go(0);
             });
@@ -313,10 +282,10 @@ export default {
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
+
 .register-form h2 {
   margin-top: 0.1%;
   padding: 1%;
   font-size: 1.5vw;
 }
-
 </style>
