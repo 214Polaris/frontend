@@ -103,7 +103,7 @@ func (srv *CartService) Add(ctx *gin.Context) {
 }
 
 // 删除商品
-func (srv *CartService) Delete(ctx gin.Context) {
+func (srv *CartService) Delete(ctx *gin.Context) {
 	cartID := ctx.PostForm("cartID")
 	id, _ := strconv.Atoi(cartID)
 	if srv.Repo.Delete(id) == false {
