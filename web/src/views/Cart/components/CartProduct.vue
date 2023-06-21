@@ -82,7 +82,7 @@
                     <div class="box_cart">
                         <div class="container">
                             <div class="row justify-content-end">
-                                <div class="col-xl-4 col-lg-4 col-md-6">
+                                <div class="col-xl-4 col-lg-3 col-md-3">
                                     <ul>
                                         <li>
                                             <span>已选商品数：</span>{{ selectedItemCount }}
