@@ -4,22 +4,15 @@
       <el-container>
         <div class="goods-info">
           <!-- 商品图片组件 -->
-            <div class="media" style="display: flex; padding-left: 10vw;">
-              <!--<GoodsImage :image="good.productLink" />-->
-              <GoodsImage
-                :image="this.good.productLink"
-              />
-              <div style="display: flex; padding-left: 10vw; font-size: large;">
-              <GoodsParams 
-              :GoodName="this.good.productName"
-              :GoodIntroduce="this.good.productIntro"
-              :GoodPrice = "this.good.productPrice"
-              :GoodId="this.good.productId"
-              :GoodLink="this.good.productLink"
-              />
-              </div>
+          <div class="media" style="display: flex; padding-left: 10vw;">
+            <!--<GoodsImage :image="good.productLink" />-->
+            <GoodsImage :image="this.good.productLink" />
+            <div style="display: flex; padding-left: 10vw; font-size: large;">
+              <GoodsParams :GoodName="this.good.productName" :GoodIntroduce="this.good.productIntro"
+                :GoodPrice="this.good.productPrice" :GoodId="this.good.productId" :GoodLink="this.good.productLink" />
             </div>
-          <!--商品信息组件-->    
+          </div>
+          <!--商品信息组件-->
         </div>
       </el-container>
     </div>
@@ -29,10 +22,8 @@
                 :GoodIntroduce="good.productIntro"
                 :GoodPrice="good.productPrice"
               /> -->
-      <GoodsIntroduce
-        GoodName="good.productName"
-        GoodIntroduce="good.productIntro"
-        GoodPrice="good.productPrice"
+      <GoodsIntroduce 
+      :dataWithPic = "dataWithPic"
       />
     </div>
   </div>
@@ -47,11 +38,12 @@ export default {
     return {
       //从上个页面获取点击的商品id
       good_id: this.$route.params.goodId,
-      good:[]
+      good: [],
+      dataWithPic:{}
     };
   },
   //向后端请求返回对应商品
-  created(){
+  created() {
     axios({
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -69,7 +61,25 @@ export default {
       .catch((error) => {
         console.error(error);
       });
+    axios({
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      method: 'post',
+      url: '/api/details/info',
+      data: {
+        productID: this.good_id,
+      },
+    })
+      .then((response) => { 
+        this.dataWithPic = response.data.dataWithPic
+        console.log(this.dataWithPic);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   },
+
   components: {
     GoodsIntroduce,
     GoodsImage,

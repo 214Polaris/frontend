@@ -85,8 +85,8 @@ export default {
 <style scoped lang="scss">
 .tb-booth {
   top:5vw;
-  width: 420px;
-  height: 420px;
+  width: 400px;
+  height: 400px;
   position: relative;
   border: 1px solid #cccccc;
   .smallImg{

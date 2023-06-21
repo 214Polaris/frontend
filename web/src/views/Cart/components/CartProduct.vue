@@ -51,7 +51,8 @@
                                             <img :src="item.productLink" :data-src="item.productLink" class="lazy"
                                                 alt="Image" />
                                         </div>
-                                        <span class="item_cart" style="margin-top: 5px; width:75%">{{ item.productName }} <br /><br />
+                                        <span class="item_cart" style="margin-top: 5px; width:70%">{{ item.productName }}
+                                            <br /><br />
                                             <div style="text-align: left;"> {{ item.value1 }} + {{ item.value2 }}</div>
                                         </span>
                                     </router-link>
@@ -68,7 +69,7 @@
                                     <strong>{{ item.productPrice * item.productCount }}</strong>
                                 </td>
                                 <td class="options">
-                                    <a href="#" @click="deleteItem(index)"><i class="ti-trash"></i></a>
+                                    <button @click="deleteItem(index)"><i class="ti-trash"></i></button>
                                 </td>
                             </tr>
                         </tbody>
@@ -174,13 +175,15 @@ function deleteItem(index) {
             cartID: cartid
         }
     })
-        .then((response) => {
+        .then(() => {
             console.log('Deleting item:', itemToDelete);
             cartlist.value.splice(index, 1);
         })
         .catch((error) => {
             console.error(error);
         });
+        location.reload()
+            this.$router.go(0)
 }
 
 //全选按钮
