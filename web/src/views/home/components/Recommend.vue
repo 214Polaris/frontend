@@ -8,7 +8,7 @@
         >
           <ul>
             <li>
-              <img :src="item.productLink" />
+              <img :src="item.productLink" class="lazy"/>
             </li>
             <li class="introduce">{{  item.productName }}</li>
             <li class="price">￥{{ item.productPrice }}</li>
@@ -50,12 +50,13 @@ export default {
 }
 
 .layer_good {
+  text-align: center;
   flex-grow: 1;
   margin-bottom: 64px;
 }
 
 .recommend {
-  margin: 8px;
+  margin: 12px;
   display: inline-block;
 }
 

@@ -138,13 +138,13 @@
           <div class="modal-body" style="font-size: x-small;">
             <el-row :gutter="12">
               <el-col v-bind="item" v-for="item in goods.dataWithPic" :key="item.option.ID" :span="8">
-                <el-card :body-style="{ padding: '0px' }">
+                <el-card :body-style="{ padding: '10px' }">
                   <img
-                    style="object-fit: contain; width:auto; height: 210px;"
+                    style="object-fit: contain; width:auto; height: 210px; "
                     :src="item.image.URL"
                     class="image"
                   />
-                  <div style="padding: 12px">
+                  <div style="padding: 12px; font-size:14px;">
                     <span>{{ item.option.Value }}</span>
                     <div class="bottom">
                       <el-button text class="button" @click="selectedparams = item, store_param()" data-bs-dismiss="modal"

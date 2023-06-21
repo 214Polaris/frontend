@@ -51,7 +51,7 @@
                                             <img :src="item.productLink" :data-src="item.productLink" class="lazy"
                                                 alt="Image" />
                                         </div>
-                                        <span class="item_cart" style="margin-top: 5px;">{{ item.productName }} <br /><br />
+                                        <span class="item_cart" style="margin-top: 5px; width:75%">{{ item.productName }} <br /><br />
                                             <div style="text-align: left;"> {{ item.value1 }} + {{ item.value2 }}</div>
                                         </span>
                                     </router-link>
