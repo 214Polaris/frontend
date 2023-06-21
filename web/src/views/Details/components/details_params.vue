@@ -255,4 +255,29 @@ function addCart() {
 .iconfont {
   font-size: xx-large;
 }
+
+.modal-body {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-gap: 20px;
+}
+
+.el-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.el-col {
+  flex-basis: 32%;
+  margin-bottom: 20px;
+}
+
+.el-button.button {
+  display: flex;
+  justify-content: center;
+}
+
 </style>

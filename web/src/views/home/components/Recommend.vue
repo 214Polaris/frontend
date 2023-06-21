@@ -1,4 +1,3 @@
-<!--这里实现推荐商品列表-->
 <template>
   <div class="total">
     <div class="layer_good">
@@ -8,9 +7,9 @@
         >
           <ul>
             <li>
-              <img :src="item.productLink" class="lazy"/>
+              <img :src="item.productLink" class="lazy" />
             </li>
-            <li class="introduce">{{  item.productName }}</li>
+            <li class="introduce">{{ item.productName }}</li>
             <li class="price">￥{{ item.productPrice }}</li>
           </ul>
         </router-link>
@@ -22,7 +21,6 @@
 <script>
 import axios from "axios";
 export default {
-  // eslint-disable-next-line vue/multi-word-component-names
   name: "recommend",
   mounted() {
     axios
@@ -56,8 +54,10 @@ export default {
 }
 
 .recommend {
-  margin: 12px;
   display: inline-block;
+  width: 300px; /* 设置每个推荐项的宽度 */
+  margin: 12px; /* 设置推荐项之间的间距 */
+  text-align: center;
 }
 
 li {
@@ -65,12 +65,13 @@ li {
 }
 
 .recommend img {
-  height: 300px;
+  width: 100%; /* 让图片宽度充满容器 */
+  height: auto; /* 根据宽度自适应调整高度 */
   text-align: center;
 }
 
 .introduce {
-  width: 300px;
+  width: 100%;
   text-align: center;
   font-size: 14px;
   margin-top: 6px;
@@ -78,7 +79,7 @@ li {
 }
 
 .price {
-  width: 300px;
+  width: 100%;
   text-align: center;
   font-size: 18px;
   color: #f00;

@@ -182,8 +182,8 @@ function deleteItem(index) {
         .catch((error) => {
             console.error(error);
         });
-        location.reload()
-            this.$router.go(0)
+    location.reload()
+    this.$router.go(0)
 }
 
 //全选按钮
