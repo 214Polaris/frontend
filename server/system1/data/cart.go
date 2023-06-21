@@ -38,7 +38,9 @@ func (repo *CartData) GetTotal(userID string) []*model.Cart {
 // 查询一个用户的一个商品记录
 func (repo *CartData) Query(cart *model.Cart) bool {
 	var count int64
-	repo.DB.Where("id = ?", cart.ID).Find(&cart).Count(&count)
+	repo.DB.Where("productID = ? and userID = ? and value1 = ? and value2 = ?", cart.ProductID, cart.UserID, cart.Value1, cart.Value2).
+		Find(&cart).
+		Count(&count)
 	if count > 0 {
 		return true
 	}
@@ -73,10 +75,12 @@ func (repo *CartData) Diminish(id int, productCount int) bool {
 // 增加商品
 func (repo *CartData) Add(cart model.Cart) bool {
 	//先判断有没有该商品在购物车
-	if repo.Query(&cart) == true {
+	tempCart := cart
+	if repo.Query(&tempCart) == true {
 		repo.DB.Model(&cart).
-			Where("productID = ? and userID = ? and type1 = ? and type2 = ?", cart.ProductID, cart.UserID, cart.Type1, cart.Type2).
+			Where("productID = ? and userID = ? and value1 = ? and value2 = ?", cart.ProductID, cart.UserID, cart.Value1, cart.Value2).
 			Update("productCount", gorm.Expr("productCount + ?", cart.ProductCount))
+		return true
 	}
 	var count int64
 	repo.DB.Model(&cart).Count(&count)

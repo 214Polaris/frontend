@@ -41,6 +41,7 @@ func main() {
 	r.POST("/api/details/info", ProductSrc.GetDetail)
 	r.POST("/api/cart", CartSrv.GetTotal)
 	r.POST("/api/add", CartSrv.Add)
+	r.POST("/api/delete", CartSrv.Delete)
 	r.Run(":8081")
 	//
 }
