@@ -48,7 +48,7 @@
                                 <td>
                                     <router-link :to="{ name: 'Details', params: { goodId: item.productID } }">
                                         <div class="thumb_cart">
-                                            <img :src="item.productLink" :data-src="item.productLink" class="lazy"
+                                            <img v-lazy="item.productLink" :data-src="item.productLink" class="lazy"
                                                 alt="Image" />
                                         </div>
                                         <span class="item_cart" style="margin-top: 5px; width:70%">{{ item.productName }}
@@ -195,3 +195,14 @@ function selectAllItems() {
 }
 
 </script>
+
+<style>
+ .box_cart {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 10px 0;
+        background-color: #fff;
+        z-index: 999; /* 确保在其他元素上方显示 */
+    }</style>
