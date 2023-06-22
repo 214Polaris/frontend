@@ -24,7 +24,7 @@
 <script setup>
 import axios from "axios";
 import { onMounted, ref } from "vue";
-import { onBeforeRouteUpdate, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 const goodsList = ref([]);
 const route = useRoute();
 const key = ref(route.params.prom);
@@ -34,11 +34,11 @@ const getgoodList = () => {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    method: "get",
+    method: "post",
     url: "/api/Search",
     data: {
-      name: key,
-      pagenum: 1,
+      name: key.value,
+      pageNum: 1,
     },
   })
     .then((response) => {
