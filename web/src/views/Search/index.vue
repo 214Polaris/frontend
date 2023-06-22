@@ -4,7 +4,7 @@
   </div>
   <div class="total">
     <div class="layer_good">
-      <div class="recommend" v-for="(item, index) in goodsList" :key="index">
+      <div class="recommend" v-for="(item, index) in goodsList.products" :key="index">
         <router-link
           :to="{ name: 'Details', params: { goodId: item.productId } }"
         >
@@ -29,9 +29,9 @@
 
 <script setup>
 import axios from "axios";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, reactive } from "vue";
 import { useRoute } from "vue-router";
-const goodsList = ref([]);
+const goodsList = reactive({ products: [], totalPage: [] });
 const route = useRoute();
 const key = ref(route.params.prom);
 const current_page = ref();
@@ -50,8 +50,9 @@ const getgoodList = () => {
     },
   })
     .then((response) => {
-      console.log(response);
-      goodsList.value = response.data;
+      goodsList.products = response.data.products;
+      goddsList.totalPage = response.data.totalPage;
+      console.log(goodsList);
     })
     .catch((error) => {
       console.error(error);
