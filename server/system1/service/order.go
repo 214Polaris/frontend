@@ -145,8 +145,8 @@ func (srv *OrderService) CreateOrder(c *gin.Context) {
 	for _, ot := range entitylist {
 		var on model.Order
 		on.OrderId = outTradeNo
-		on.UserId = ot.UserId
-		on.ProductId = ot.ProductId
+		on.UserId = ot.UserID
+		on.ProductId = ot.ProductID
 		on.ProductNum = ot.ProductNum
 		on.TotalPrice = ot.TotalPrice
 		on.Status = 1
