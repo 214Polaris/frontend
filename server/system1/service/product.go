@@ -79,9 +79,9 @@ func (srv *ProductService) SendAll(ctx *gin.Context) {
 		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code": 422, "msg": "获取失败"})
 		return
 	}
-	ctx.JSON(200, gin.H{
-		"products": products,
-	})
+	ctx.JSON(200,
+		products,
+	)
 }
 
 func (srv *ProductService) Search(ctx *gin.Context) {

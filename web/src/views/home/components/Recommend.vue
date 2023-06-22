@@ -5,7 +5,7 @@
         <router-link
           :to="{ name: 'Details', params: { goodId: item.productId } }"
         >
-          <ul>
+          <ul >
             <li>
               <img v-lazy="item.productLink" class="lazy" />
             </li>
