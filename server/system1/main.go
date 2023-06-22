@@ -28,8 +28,8 @@ func main() {
 	config.AllowMethods = []string{"GET", "POST"}
 	r.Use(cors.New(config))
 	r.GET("/", Application)
-	r.GET("/api/goodslist", ProductSrc.SendAll)
-	r.GET("/api/Search", ProductSrc.Search)
+	r.POST("/api/goodslist", ProductSrc.SendAll)
+	r.POST("/api/Search", ProductSrc.Search)
 	r.POST("/api/details", ProductSrc.GetByID)
 	r.POST("/api/details/info", ProductSrc.GetDetail)
 
@@ -39,7 +39,7 @@ func main() {
 	r.POST("/api/getuserorders", OrderSrv.GetUserOrders)
 	r.POST("/api/createorder", OrderSrv.CreateOrder)
 	r.POST("/api/cancelorder", OrderSrv.CancelOrder)
-	
+
 	r.POST("/api/Login", UserSrv.Login)
 	r.POST("/api/Register", UserSrv.Register)
 	r.POST("/api/Edit", UserSrv.Edit)
