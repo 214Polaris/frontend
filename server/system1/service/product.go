@@ -73,30 +73,14 @@ type ProductService struct {
 //}
 
 func (srv *ProductService) SendAll(ctx *gin.Context) {
-	page := ctx.PostForm("pageNum")
 	products := srv.Repo.GetTotal()
 	//获取所有物品失败，返回状态码422
 	if products == nil {
 		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code": 422, "msg": "获取失败"})
 		return
 	}
-	//以下为分页操作
-	//确定要发送的商品的下标
-	productsNum := len(products)
-	//总页数
-	totalPage := (productsNum-1)/10 + 1
-	//确定商品下标范围
-	pageNum, _ := strconv.Atoi(page)
-	startIndex := (pageNum - 1) * 10
-	endIndex := startIndex + 9
-	//防止越界
-	if endIndex+1 > productsNum {
-		endIndex = productsNum - 1
-	}
-	selectedProducts := products[startIndex : endIndex+1]
 	ctx.JSON(200, gin.H{
-		"totalPage": totalPage,
-		"products":  selectedProducts,
+		"products": products,
 	})
 }
 
