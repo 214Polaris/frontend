@@ -15,8 +15,8 @@
                 <a href="#0" data-bs-toggle="modal" data-bs-target="#para-modal"><i
                     class="iconfont icon-arrow-double-right"></i></a>
               </div>
-              <div class="col-xl-5 col-lg-5 col-md-6 col-6" style="padding-bottom: 10px">
-                <a href="#0" data-bs-toggle="modal" data-bs-target="#para-modal">{{ store.dataWithPic.option.Value }}</a>
+              <div class="col-xl-5 col-lg-5 col-md-6 col-6" style="padding-bottom: 10px;">
+                <a href="#0" data-bs-toggle="modal" data-bs-target="#para-modal" style="color: blueviolet;">{{ store.dataWithPic.option.Value }}</a>
               </div>
             </div>
             <el-divider />
@@ -28,7 +28,7 @@
                     class="iconfont icon-arrow-double-right"></i></a>
               </div>
               <div class="col-xl-5 col-lg-5 col-md-6 col-6" style="padding-bottom: 10px">
-                <a href="#0" data-bs-toggle="modal" data-bs-target="#para-modal">{{ store.dataWithoutPic.option.Value
+                <a href="#0" data-bs-toggle="modal" data-bs-target="#para-modal" style="color: blueviolet;">{{ store.dataWithoutPic.option.Value
                 }}</a>
               </div>
             </div>

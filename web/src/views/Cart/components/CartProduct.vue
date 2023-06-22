@@ -51,7 +51,7 @@
                                             <img v-lazy="item.productLink" :data-src="item.productLink" class="lazy"
                                                 alt="Image" />
                                         </div>
-                                        <span class="item_cart" style="margin-top: 5px; width:70%">{{ item.productName }}
+                                        <span class="item_cart" style="color: black;margin-top: 5px; width:70%">{{ item.productName }}
                                             <br /><br />
                                             <div style="text-align: left;"> {{ item.value1 }} + {{ item.value2 }}</div>
                                         </span>
