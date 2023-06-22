@@ -157,14 +157,17 @@ func (srv *OrderService) CreateOrder(c *gin.Context) {
 		if err != nil {
 			xlog.Error(err)
 			c.JSON(http.StatusUnprocessableEntity, gin.H{
-				"msg": "订单创建失败！",
+				"msg":     "订单创建失败！",
+				"orderId": outTradeNo,
 			})
+
 			return
 		}
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"msg": "订单创建完成！",
+		"msg":     "订单创建完成！",
+		"orderId": outTradeNo,
 	})
 }
 
