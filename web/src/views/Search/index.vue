@@ -1,4 +1,7 @@
 <template>
+  <div class="headText">
+    <p>以下是 {{ key }} 的搜索结果 :</p>
+  </div>
   <div class="total">
     <div class="layer_good">
       <div class="recommend" v-for="(item, index) in goodsList" :key="index">
@@ -7,7 +10,7 @@
         >
           <ul>
             <li>
-              <img v-lazy="item.productLink" class="lazy" />
+              <img :src="item.productLink" class="lazy" />
             </li>
             <li class="introduce">{{ item.productName }}</li>
             <li class="price">￥{{ item.productPrice }}</li>
@@ -18,30 +21,50 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import axios from "axios";
-export default {
-  name: "recommend",
-  mounted() {
-    axios
-      .get("/api/goodslist")
-      .then((response) => {
-        this.goodsList = response.data;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  },
-  data() {
-    return {
-      goodsList: null,
-    };
-  },
+import { onMounted, ref } from "vue";
+import { onBeforeRouteUpdate, useRoute } from "vue-router";
+const goodsList = ref([]);
+const route = useRoute();
+const key = ref(route.params.prom);
+
+const getgoodList = () => {
+  axios({
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    method: "get",
+    url: "/api/Search",
+    data: {
+      name: key,
+      pagenum: 1,
+    },
+  })
+    .then((response) => {
+      goodsList.value = response.data;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 };
+
+onMounted(() => {
+  getgoodList();
+});
 </script>
 
 <style scoped>
+.headText {
+  position: relative;
+  top: 30px;
+  left: 20px;
+  font-size: 20px;
+}
+
 .total {
+  position: relative;
+  top: 50px;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;

@@ -1,7 +1,11 @@
 <script setup>
 import { onMounted, ref } from "vue";
+import axios from "axios";
 import ol from "@/static/orderList.json";
+import { ElMessage } from "element-plus";
 const orderList = ref([]);
+const one_orderList = ref([]);
+const userID = localStorage.getItem("userID");
 const tabTypes = [
   { name: "all", label: "全部订单" },
   { name: "unpay", label: "待付款" },
@@ -14,12 +18,49 @@ const tabTypes = [
 
 const getOrderList = () => {
   orderList.value = ol;
+  // axios({
+  //   headers: {
+  //     "Content-Type": "application/x-www-form-urlencoded",
+  //   },
+  //   method: "post",
+  //   url: "/api/getuserorders",
+  //   data: {
+  //     id: userID,
+  //   },
+  // })
+  //   .then((response) => {
+  //     console.log(response);
+  //   })
+  //   .catch(() => {
+  //     ElMessage.error("无订单");
+  //   });
+};
+
+const getOneOrder = () => {
+  axios({
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    method: "post",
+    url: "/api/getuserorders",
+    data: {
+      id: userID,
+    },
+  })
+    .then((response) => {
+      console.log(response);
+    })
+    .catch(() => {
+      ElMessage.error("无订单");
+    });
 };
 
 //根据订单类型返回状态描述
 const displayState = (state) => {
   return tabTypes[state].label;
 };
+
+const orderPay = () => {};
 
 //根据不同类型选择，显示不同订单
 const selectList = (state) => {
@@ -55,6 +96,7 @@ onMounted(() => {
         max-height="500px"
         stripe
         lazy
+        v-loading="loading"
       >
         <!-- <el-table-column
           fixed
@@ -62,7 +104,9 @@ onMounted(() => {
           label="订单编号"
           width="150px"
         ></el-table-column> -->
-
+        <template #empty>
+          <el-empty></el-empty>
+        </template>
         <el-table-column
           label="下单商品"
           width="300px"
@@ -122,6 +166,7 @@ onMounted(() => {
                 v-if="tab.label == '待付款'"
                 href="javascript:"
                 class="go_to_pay"
+                @click="orderPay()"
                 >去付款</a
               >
               <a

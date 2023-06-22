@@ -7,7 +7,7 @@
         >
           <ul>
             <li>
-              <img v-lazy="item.productLink" class="lazy" />
+              <img :src="item.productLink" class="lazy" />
             </li>
             <li class="introduce">{{ item.productName }}</li>
             <li class="price">￥{{ item.productPrice }}</li>

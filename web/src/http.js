@@ -8,7 +8,6 @@ axios.interceptors.request.use(
     // 在发送请求之前做些什么 验证token之类的
     const token = localStorage.getItem("token");
     const User = localStorage.getItem("userID");
-    console.log(token);
     config.headers["token"] = token; //在请求头设置token
     return config;
   },
