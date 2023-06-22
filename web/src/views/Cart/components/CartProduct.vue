@@ -48,7 +48,7 @@
                                 <td>
                                     <router-link :to="{ name: 'Details', params: { goodId: item.productID } }">
                                         <div class="thumb_cart">
-                                            <img :src="item.productLink" :data-src="item.productLink" class="lazy"
+                                            <img v-lazy="item.productLink" :data-src="item.productLink" class="lazy"
                                                 alt="Image" />
                                         </div>
                                         <span class="item_cart" style="margin-top: 5px; width:70%">{{ item.productName }}
@@ -107,6 +107,7 @@
 </template>
 
 <script setup>
+import { timestamp } from '@vueuse/core';
 import axios from 'axios';
 import { onMounted, ref, computed } from 'vue';
 let cartlist = ref([]);
@@ -146,9 +147,32 @@ function calculateTotal() {
 // 提交支付
 function submitPayment() {
     const selectedItems = cartlist.value.filter((item) => item.selected);
-    // 执行支付操作，你可以在这里调用支付接口或执行其他支付相关的操作
-    console.log('Selected items:', selectedItems);
-    console.log('Total amount:', calculateTotal());
+    // Add userid and totalQuantity to each selected item
+    let totalprice = calculateTotal();
+    // const formattedItems = selectedItems.map((item) => {
+    //     return {
+    //         productId: item.productID,
+    //         productNum: item.productCount
+    //     };
+    // });
+    for (const item of selectedItems) {
+        item.userId = localStorage.getItem("userID");
+        item.TotalPrice = totalprice;
+        item.userAddress = '';
+        item.mobile = '';
+    }
+    // Perform the payment request
+    axios
+        .post('/api/createorder', selectedItems)
+        .then((response) => {
+            console.log('Payment successful:', response.data);
+            let orderId = response.orderId;
+            console.log(orderId);
+        })
+        .catch((error) => {
+            console.error('Payment error:', error);
+            // Handle error response
+        });
 }
 
 // 计算已选商品的数量
@@ -195,3 +219,16 @@ function selectAllItems() {
 }
 
 </script>
+
+<style>
+.box_cart {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 10px 0;
+    background-color: #fff;
+    z-index: 999;
+    /* 确保在其他元素上方显示 */
+}
+</style>

@@ -7,7 +7,7 @@
     ref="boothRef"
   >
     <!--此处导入图片-->
-    <img :src="image" alt="" v-if="image" class="smallImg"/>
+    <img v-lazy="image" alt="" v-if="image" class="smallImg"/>
     <!--大图容器-->
     <div class="mask" ref="mask" v-show="boxShow" />
     <div class="big-img_box" ref="bigImgBox" v-show="boxShow">
