@@ -4,9 +4,11 @@ import Home from "../views/home/index";
 import Details from "../views/Details/index.vue";
 import Layout from "../views/Layout/index";
 import Member from "@/views/member/index.vue";
-import cart from "@/views/Cart/index.vue"
+import cart from "@/views/Cart/index.vue";
 import UserInfo from "@/views/member/components/userInfo.vue";
 import userOrder from "@/views/member/components/userOrder.vue";
+import Search from "@/views/Search/index.vue";
+import empty from "@/views/Layout/empty.vue";
 import { createRouter, createWebHashHistory } from "vue-router";
 
 const routes = [
@@ -15,6 +17,12 @@ const routes = [
     path: "/activity",
     name: "Activity",
     component: Activity,
+  },
+  //空白页，处理搜索时刷新问题
+  {
+    path: "/empty/:prom",
+    name: "empty",
+    component: empty,
   },
   // Home组件，显示中心内容
   {
@@ -37,6 +45,7 @@ const routes = [
           },
           {
             path: "order",
+            name: "order",
             component: userOrder,
           },
         ],
@@ -58,7 +67,12 @@ const routes = [
           requireAuth: true,
         },
         component: cart,
-      }
+      },
+      {
+        path: "search/:prom",
+        name: "search",
+        component: Search,
+      },
     ],
   },
   {
