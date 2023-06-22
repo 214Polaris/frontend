@@ -77,6 +77,7 @@ li {
   font-size: 14px;
   margin-top: 6px;
   margin-bottom: 6px;
+  color: black;
 }
 
 .price {

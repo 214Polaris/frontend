@@ -18,6 +18,12 @@
         </router-link>
       </div>
     </div>
+    <el-pagination
+      background="true"
+      layout="prev, pager, next"
+      :total="50"
+      class="pageSelect"
+    />
   </div>
 </template>
 
@@ -28,6 +34,8 @@ import { onBeforeRouteUpdate, useRoute } from "vue-router";
 const goodsList = ref([]);
 const route = useRoute();
 const key = ref(route.params.prom);
+const current_page = ref();
+const total_page = ref();
 
 const getgoodList = () => {
   axios({
@@ -35,13 +43,14 @@ const getgoodList = () => {
       "Content-Type": "application/x-www-form-urlencoded",
     },
     method: "get",
-    url: "/api/Search",
-    data: {
-      name: key,
-      pagenum: 1,
-    },
+    url: "/api/goodslist",
+    // data: {
+    //   name: key,
+    //   pagenum: 1,
+    // },
   })
     .then((response) => {
+      console.log(response);
       goodsList.value = response.data;
     })
     .catch((error) => {
@@ -100,6 +109,7 @@ li {
   font-size: 14px;
   margin-top: 6px;
   margin-bottom: 6px;
+  color: black;
 }
 
 .price {
@@ -107,5 +117,12 @@ li {
   text-align: center;
   font-size: 18px;
   color: #f00;
+}
+
+.pageSelect {
+  position: relative;
+  align-content: center;
+  text-align: center;
+  bottom: 40px;
 }
 </style>
