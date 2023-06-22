@@ -107,10 +107,11 @@
 </template>
 
 <script setup>
-import { timestamp } from '@vueuse/core';
 import axios from 'axios';
 import { onMounted, ref, computed } from 'vue';
+import { useRouter } from 'vue-router'
 let cartlist = ref([]);
+const router = useRouter();
 //获取购物车内容
 onMounted(() => {
     let id = localStorage.getItem("userID");
@@ -147,7 +148,7 @@ function calculateTotal() {
 // 提交支付
 function submitPayment() {
     const selectedItems = cartlist.value.filter((item) => item.selected);
-    // Add userid and totalQuantity to each selected item
+    // 计算总价
     let totalprice = calculateTotal();
     // const formattedItems = selectedItems.map((item) => {
     //     return {
@@ -155,19 +156,21 @@ function submitPayment() {
     //         productNum: item.productCount
     //     };
     // });
+    //加项目
     for (const item of selectedItems) {
         item.userId = localStorage.getItem("userID");
         item.TotalPrice = totalprice;
         item.userAddress = '';
         item.mobile = '';
     }
-    // Perform the payment request
+    // 提交创建订单
     axios
         .post('/api/createorder', selectedItems)
         .then((response) => {
             console.log('Payment successful:', response.data);
             let orderId = response.orderId;
             console.log(orderId);
+            router.push({ name: "empty", params: { prom: orderId} });
         })
         .catch((error) => {
             console.error('Payment error:', error);
