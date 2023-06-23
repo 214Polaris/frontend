@@ -26,6 +26,11 @@ type Order struct {
 	Image_Id string `json:"imageId" gorm:"column:image_id"`
 	//图片url
 	Url string `json:"url" gorm:"column:url"`
+	//类别1
+	Value1 string `json:"value1" gorm:"column:value1"`
+	//类别2
+	//图片url
+	Value2 string `json:"value2" gorm:"column:value2"`
 }
 
 // 订单创建的中间状态

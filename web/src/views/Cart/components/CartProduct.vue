@@ -182,13 +182,19 @@ function submitPayment() {
     item.mobile = "";
   }
   // 提交创建订单
-  axios
-    .post("/api/createorder", selectedItems)
+  axios({
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "post",
+    url: "/api/createorder",
+    data: {entitylist:selectedItems}
+  })
     .then((response) => {
       console.log("Payment successful:", response.data);
       let orderId = response.data.orderId;
       console.log(orderId);
-      router.push({ name: "checkout", params: orderId });
+      router.push({ name: 'checkout', params: orderId });
     })
     .catch((error) => {
       console.error("Payment error:", error);

@@ -1,5 +1,5 @@
 import Login from "../views/Login/index.vue";
-import Activity from "../views/Cart/components/CartProduct.vue";
+import Activity from "../views/CheckOut/confirm.vue";
 import Home from "../views/home/index";
 import Details from "../views/Details/index.vue";
 import Layout from "../views/Layout/index";
