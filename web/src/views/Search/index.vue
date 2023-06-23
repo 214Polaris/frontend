@@ -4,7 +4,11 @@
   </div>
   <div class="total">
     <div class="layer_good">
-      <div class="recommend" v-for="(item, index) in goodsList.products" :key="index">
+      <div
+        class="recommend"
+        v-for="(item, index) in goodsList.products"
+        :key="index"
+      >
         <router-link
           :to="{ name: 'Details', params: { goodId: item.productId } }"
         >

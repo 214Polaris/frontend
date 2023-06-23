@@ -17,6 +17,7 @@ import (
 )
 
 type OrderSrv interface {
+	GetOrders(c *gin.Context)
 	GetUserOrders(c *gin.Context)
 	AliPayNotify(c *gin.Context)
 	AliPayReturn(c *gin.Context)
@@ -27,6 +28,24 @@ type OrderSrv interface {
 
 type OrderService struct {
 	Repo data.OrderRepoInterface
+}
+
+// 根据订单号获取订单
+func (srv *OrderService) GetOrders(c *gin.Context) {
+	orderid := c.PostForm("orderId")
+
+	orders := srv.Repo.GetOrdersById(orderid)
+	if orders == nil {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
+			"msg":        "根据订单号获取订单失败",
+			"entitylist": orders,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"msg":        "根据订单号获取订单成功",
+		"entitylist": orders,
+	})
 }
 
 // 根据用户id获取订单
@@ -52,8 +71,9 @@ func (srv *OrderService) GetUserOrders(c *gin.Context) {
 func (srv *OrderService) AliPayNotify(c *gin.Context) {
 	var o model.Order
 	o.OrderId = c.PostForm("orderId")
-	tradeStatus := c.PostForm("trade_status")
-
+	tradeStatus := c.PostForm("status")
+	mobile := c.PostForm("mobile")
+	useraddress := c.PostForm("userAddress")
 	orders := srv.Repo.GetOrders(o.OrderId)
 	if orders == nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
@@ -75,11 +95,13 @@ func (srv *OrderService) AliPayNotify(c *gin.Context) {
 		//更新订单支付状态
 		for _, ors := range orders {
 			ors.Status = 2
+			ors.Mobile = mobile
+			ors.UserAddress = useraddress
 			_, err := srv.Repo.Edit(*ors)
 			if err != nil {
 				xlog.Error(err)
 				c.JSON(http.StatusUnprocessableEntity, gin.H{
-					"msg": "订单取消失败！",
+					"msg": "订单更新出错！",
 				})
 				return
 			}
@@ -124,10 +146,10 @@ func (srv *OrderService) AliPayReturn(c *gin.Context) {
 	})
 }
 
-// 创建订单 需要post整个model.order中OrderTemp的属性 按数组形式切片获取
+// 创建订单 需要post整个model.order中OrderTemp的属性 按数组形式获取后切片
 func (srv *OrderService) CreateOrder(c *gin.Context) {
 	var entitylist []model.OrderTemp
-	if err := c.ShouldBind(&entitylist); err != nil {
+	if err := c.ShouldBindJSON(&entitylist); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"msg": "获取实体失败，不能生成订单！",
 		})
@@ -146,13 +168,16 @@ func (srv *OrderService) CreateOrder(c *gin.Context) {
 		var on model.Order
 		on.OrderId = outTradeNo
 		on.UserId = ot.UserId
-		on.ProductId = ot.ProductId
-		on.ProductNum = ot.ProductNum
-		on.TotalPrice = ot.TotalPrice
+		on.ProductName = ot.ProductName + "+" + ot.Value1 + "+" + ot.Value2
+		on.ProductCount = ot.ProductCount
+		on.TotalPrice = ot.ProductPrice
 		on.Status = 1
 		on.CreateTime = timeStr
-		on.Mobile = ot.Mobile
 		on.UserAddress = ot.UserAddress
+		on.Mobile = ot.Mobile
+		on.Image_Id = ot.Image_Id
+		on.Url = ot.Url
+
 		_, err := srv.Repo.Add(on)
 		if err != nil {
 			xlog.Error(err)
@@ -160,7 +185,6 @@ func (srv *OrderService) CreateOrder(c *gin.Context) {
 				"msg":     "订单创建失败！",
 				"orderId": outTradeNo,
 			})
-
 			return
 		}
 	}
@@ -171,13 +195,13 @@ func (srv *OrderService) CreateOrder(c *gin.Context) {
 	})
 }
 
-// 支付宝页面设置 订单创建和支付登录界面url创建  post：用户id，总金额，订单id
+// 支付宝页面设置 支付登录界面url获取  post：用户id，总金额，订单id
 func (srv *OrderService) Alipay(c *gin.Context) {
 	var o model.Order
 	// 订单号获取 时间戳表示
 	o.OrderId = c.PostForm("orderId")
-	o.UserId = c.PostForm("userID")
-	o.TotalPrice = c.GetInt64("totalPrice")
+	o.UserId = c.PostForm("userId")
+	o.TotalPrice = c.GetFloat64("totalPrice")
 	//获取url进行支付
 	client, err := alipay.NewClient(config.AppId, config.PrivateKey, config.IsProduction)
 	if err != nil {
@@ -232,7 +256,7 @@ func (srv *OrderService) CancelOrder(c *gin.Context) {
 	var o model.Order
 	o.OrderId = c.PostForm("orderId")
 
-	orders := srv.Repo.GetUserOrders(o.OrderId)
+	orders := srv.Repo.GetOrdersById(o.OrderId)
 	for _, ors := range orders {
 		ors.Status = 6
 		_, err := srv.Repo.Edit(*ors)

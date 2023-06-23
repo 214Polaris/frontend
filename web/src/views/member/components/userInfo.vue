@@ -454,6 +454,7 @@ onMounted(() => {
     v-model="addressDialogVisible"
     title="修改地址"
     @close="editDialogClosed_info()"
+    top="18vh"
   >
     <el-form
       :model="form"
