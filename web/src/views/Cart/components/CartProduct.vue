@@ -62,7 +62,7 @@
                         alt="Image"
                       />
                     </div>
-                    <span class="item_cart" style="margin-top: 5px; width: 70%"
+                    <span class="item_cart" style="color: black; margin-top: 5px; width: 70%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" :title="item.productName"
                       >{{ item.productName }} <br /><br />
                       <div style="text-align: left">
                         {{ item.value1 }} + {{ item.value2 }}
@@ -83,7 +83,7 @@
                   ></el-input-number>
                 </td>
                 <td style="padding-left: 5.5vw">
-                  <strong>{{ item.productPrice * item.productCount }}</strong>
+                  <strong style="color:red">{{ item.productPrice * item.productCount }}</strong>
                 </td>
                 <td class="options">
                   <button @click="deleteItem(index)">
