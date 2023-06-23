@@ -38,7 +38,7 @@ func (o *OrderData) GetOrders(id string) (pro []*model.Order) {
 }
 
 func (o *OrderData) Add(order model.Order) (*model.Order, error) {
-	err := o.DB.Create(order).Error
+	err := o.DB.Create(&order).Error
 	if err != nil {
 		return &order, fmt.Errorf("订单添加失败")
 	}

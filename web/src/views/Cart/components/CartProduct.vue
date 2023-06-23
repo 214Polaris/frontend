@@ -188,7 +188,7 @@ function submitPayment() {
     },
     method: "post",
     url: "/api/createorder",
-    data: {entitylist:selectedItems}
+    data: selectedItems
   })
     .then((response) => {
       console.log("Payment successful:", response.data);

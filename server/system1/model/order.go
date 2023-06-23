@@ -29,14 +29,13 @@ type Order struct {
 	//类别1
 	Value1 string `json:"value1" gorm:"column:value1"`
 	//类别2
-	//图片url
 	Value2 string `json:"value2" gorm:"column:value2"`
 }
 
 // 订单创建的中间状态
 type OrderTemp struct {
-	CardID       int     `json:"cardID" binding:"required"`
-	ProductID    int     `json:"productID" binding:"required"`
+	CartID       int     `json:"cartID" binding:"required"`
+	ProductID    string  `json:"productID" binding:"required"`
 	ProductLink  string  `json:"productLink" binding:"required"`
 	ProductName  string  `json:"productName" binding:"required"`
 	ProductCount int     `json:"productCount" binding:"required"`
@@ -49,9 +48,9 @@ type OrderTemp struct {
 	Option2_id   string  `json:"option2_id" binding:"required"`
 	Type2        string  `json:"type2" binding:"required"`
 	Value2       string  `json:"value2" binding:"required"`
-	Selected     string  `json:"selected" binding:"required"`
+	Selected     bool    `json:"selected" binding:"required"`
 	UserId       string  `json:"userID" binding:"required"`
-	TotalPrice   float64 `json:"TotalPrice" binding:"required"`
-	UserAddress  string  `json:"userAddress" binding:"required"`
-	Mobile       string  `json:"mobile" binding:"required"`
+	TotalPrice   string  `json:"TotalPrice" binding:"required"`
+	UserAddress  string  `json:"userAddress"`
+	Mobile       string  `json:"mobile"`
 }

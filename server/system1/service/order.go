@@ -152,11 +152,19 @@ type entity struct {
 
 // 创建订单 需要post整个model.order中OrderTemp的属性 按数组形式获取后切片
 func (srv *OrderService) CreateOrder(c *gin.Context) {
-	//var entitylist []model.OrderTemp
-	var e1 entity
-	if err := c.ShouldBindJSON(&e1); err != nil {
-		c.JSON(http.StatusOK, gin.H{
+	//var e2 model.OrderTemp
+	//if err := c.ShouldBindJSON(&e2); err != nil {
+	//	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	//	return
+	//}
+	//var e1 entity
+
+	var entitylist []model.OrderTemp
+	//if err := c.ShouldBind(&entitylist); err != nil {=
+	if err := c.ShouldBindJSON(&entitylist); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
 			"msg": "获取实体失败，不能生成订单！",
+			"len": len(entitylist),
 		})
 		return
 	}
@@ -169,13 +177,14 @@ func (srv *OrderService) CreateOrder(c *gin.Context) {
 	timeStr := time.Now().Format("2006-01-02 15:04:05") //当前时间的字符串，2006-01-02 15:04:05据说是golang的诞生时间，固定写法
 
 	// 创建订单
-	for _, ot := range e1.entitylist {
+	println(len(entitylist))
+	for _, ot := range entitylist {
 		var on model.Order
 		on.OrderId = outTradeNo
 		on.UserId = ot.UserId
 		on.ProductName = ot.ProductName + "+" + ot.Value1 + "+" + ot.Value2
 		on.ProductCount = ot.ProductCount
-		on.TotalPrice = ot.TotalPrice
+		on.TotalPrice = ot.ProductPrice
 		on.Status = 1
 		on.CreateTime = timeStr
 		on.UserAddress = ot.UserAddress
@@ -184,6 +193,7 @@ func (srv *OrderService) CreateOrder(c *gin.Context) {
 		on.Url = ot.Url
 		on.Value1 = ot.Value1
 		on.Value2 = ot.Value2
+
 		_, err := srv.Repo.Add(on)
 		if err != nil {
 			xlog.Error(err)
@@ -194,10 +204,12 @@ func (srv *OrderService) CreateOrder(c *gin.Context) {
 			return
 		}
 	}
-	println(len(e1.entitylist))
+
 	c.JSON(http.StatusOK, gin.H{
 		"msg":     "订单创建完成！",
 		"orderId": outTradeNo,
+		"strr":    timeStr,
+		"entity":  entitylist,
 	})
 }
 
