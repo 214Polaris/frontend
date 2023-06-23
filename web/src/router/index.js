@@ -9,6 +9,7 @@ import UserInfo from "@/views/member/components/userInfo.vue";
 import userOrder from "@/views/member/components/userOrder.vue";
 import Search from "@/views/Search/index.vue";
 import empty from "@/views/Layout/empty.vue";
+import CheckOut from "@/views/CheckOut/index.vue";
 import { createRouter, createWebHashHistory } from "vue-router";
 
 const routes = [
@@ -72,6 +73,11 @@ const routes = [
         path: "search/:prom",
         name: "search",
         component: Search,
+      },
+      {
+        path: "checkout/:orderID",
+        name: "checkout",
+        component: CheckOut,
       },
     ],
   },
