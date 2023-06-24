@@ -41,6 +41,7 @@ func main() {
 	r.POST("/api/createorder", OrderSrv.CreateOrder)
 	r.POST("/api/cancelorder", OrderSrv.CancelOrder)
 	r.POST("/api/finishorder", OrderSrv.FinishOrder)
+
 	r.POST("/api/Login", UserSrv.Login)
 	r.POST("/api/Register", UserSrv.Register)
 	r.POST("/api/Edit", UserSrv.Edit)
@@ -50,6 +51,7 @@ func main() {
 	r.POST("/api/cart", CartSrv.GetTotal)
 	r.POST("/api/add", CartSrv.Add)
 	r.POST("/api/delete", CartSrv.Delete)
+	r.POST("/api/remove", CartSrv.Remove)
 	r.Run(":8081")
 	//
 }

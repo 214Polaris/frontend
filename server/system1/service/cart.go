@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/gin-gonic/gin"
+	"net/http"
 	"strconv"
 	"system/data"
 	"system/model"
@@ -20,6 +21,8 @@ type CartSrv interface {
 	Add(ctx *gin.Context)
 	// 删除商品
 	Delete(ctx *gin.Context)
+	// 结算后删除部分商品
+	Remove(ctx *gin.Context)
 }
 
 type CartService struct {
@@ -109,6 +112,30 @@ func (srv *CartService) Delete(ctx *gin.Context) {
 	if srv.Repo.Delete(id) == false {
 		ctx.JSON(401, gin.H{"msg": "删除失败"})
 		return
+	}
+	ctx.JSON(200, gin.H{"msg": "删除成功"})
+}
+
+// 定义前端发送的 JSON 结构
+type CartIDs struct {
+	CartID []int `json:"cartId"`
+}
+
+// 结算后删除部分商品
+func (srv *CartService) Remove(ctx *gin.Context) {
+	var data CartIDs
+	if err := ctx.ShouldBindJSON(&data); err != nil {
+		// 处理解析错误
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// 遍历 cartid 数组
+	for _, cartID := range data.CartID {
+		if srv.Repo.Delete(cartID) == false {
+			ctx.JSON(401, gin.H{"msg": "删除失败"})
+			return
+		}
 	}
 	ctx.JSON(200, gin.H{"msg": "删除成功"})
 }
