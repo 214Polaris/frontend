@@ -8,6 +8,8 @@ type Order struct {
 	OrderId string `json:"orderId" gorm:"column:order_id"`
 	//客户id
 	UserId string `json:"userId" gorm:"column:user_id"`
+	//商品id
+	ProductID string `json:"productID" gorm:"column:product_id"`
 	//商品名称 包含类别
 	ProductName string `json:"productName" gorm:"column:product_name"`
 	//商品num

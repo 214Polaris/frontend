@@ -38,10 +38,10 @@ const passForm = ref({
 const goodList = ref([]);
 
 const region = ref({
-  province: "350000",
-  city: "350100",
-  area: "350104",
-  town: "350104008",
+  province: "",
+  city: "",
+  area: "",
+  town: "",
 });
 
 const getUserInfo = () => {

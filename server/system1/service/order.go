@@ -9,6 +9,7 @@ import (
 	"github.com/go-pay/gopay/pkg/xlog"
 	_ "github.com/go-sql-driver/mysql"
 	"net/http"
+	"strconv"
 	"strings"
 	"system/config"
 	"system/data"
@@ -182,9 +183,11 @@ func (srv *OrderService) CreateOrder(c *gin.Context) {
 		var on model.Order
 		on.OrderId = outTradeNo
 		on.UserId = ot.UserId
-		on.ProductName = ot.ProductName + "+" + ot.Value1 + "+" + ot.Value2
+		on.ProductID = ot.ProductID
+		on.ProductName = ot.ProductName
 		on.ProductCount = ot.ProductCount
-		on.TotalPrice = ot.ProductPrice
+		pricetemp, _ := strconv.ParseFloat(ot.TotalPrice, 64)
+		on.TotalPrice = pricetemp
 		on.Status = 1
 		on.CreateTime = timeStr
 		on.UserAddress = ot.UserAddress
