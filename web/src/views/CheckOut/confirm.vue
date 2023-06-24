@@ -27,12 +27,33 @@
 		</main>
 	</div>
 </template>
-<script>
-export default {
-	methods: {
-		goToHomePage() {
-			window.location.href = "/"; // 替换为您的主页地址
+<script setup>
+import axios from 'axios';
+import { onMounted } from 'vue';
+onMounted(() => {
+	const hashIndex = window.location.href.indexOf('#');
+    const queryString = window.location.href.slice(hashIndex + 1);
+    const urlParams = new URLSearchParams(queryString);
+    const outTradeNo = urlParams.get('out_trade_no');
+	axios({
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded",
 		},
-	},
+		method: "post",
+		url: "/api/finishorder",
+		data: {
+			orderId: outTradeNo
+		},
+	})
+		.then((response) => {
+			console.log(response);
+		})
+		.catch((error) => {
+			console.error(error);
+		});
+}
+)
+function goToHomePage() {
+	window.location.href = "/"; // 替换为您的主页地址
 };
 </script>

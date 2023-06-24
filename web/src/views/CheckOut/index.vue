@@ -126,7 +126,9 @@ const goPay = async () => {
     data: {
       orderId: orderID,
       userId:userID,
-      totalPrice:String(totalPrice.value)
+      totalPrice:String(totalPrice.value),
+      mobile:form.value.phone,
+      useraddress:form.value.address
     },
   })
     .then((response) => {
