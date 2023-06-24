@@ -7,7 +7,7 @@
         >
           <ul>
             <li>
-              <img v-lazy="item.productLink" class="lazy" />
+              <img :src="item.productLink" class="lazy" />
             </li>
             <li class="introduce">{{ item.productName }}</li>
             <li class="price">￥{{ item.productPrice }}</li>
@@ -77,7 +77,6 @@ li {
   font-size: 14px;
   margin-top: 6px;
   margin-bottom: 6px;
-  color: black;
 }
 
 .price {

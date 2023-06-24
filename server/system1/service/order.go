@@ -9,7 +9,7 @@ import (
 	"github.com/go-pay/gopay/pkg/xlog"
 	_ "github.com/go-sql-driver/mysql"
 	"net/http"
-	"strings"
+	"strconv"
 	"system/config"
 	"system/data"
 	"system/model"
@@ -17,16 +17,46 @@ import (
 )
 
 type OrderSrv interface {
+	//根据订单号获取订单
+	GetOrders(c *gin.Context)
+	//根据用户id获取订单
 	GetUserOrders(c *gin.Context)
+	//支付唤醒 不需关注
 	AliPayNotify(c *gin.Context)
+	//支付回调 不需关注
 	AliPayReturn(c *gin.Context)
+	//创建订单
 	CreateOrder(c *gin.Context)
+	//创建支付
 	Alipay(c *gin.Context)
+	//取消订单 更新订单
 	CancelOrder(c *gin.Context)
+	//支付订单 更新订单
+	FinishOrder(c *gin.Context)
 }
 
 type OrderService struct {
 	Repo data.OrderRepoInterface
+}
+
+var temp string
+
+// 根据订单号获取订单
+func (srv *OrderService) GetOrders(c *gin.Context) {
+	orderid := c.PostForm("orderId")
+
+	orders := srv.Repo.GetOrdersById(orderid)
+	if orders == nil {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
+			"msg":        "根据订单号获取订单失败",
+			"entitylist": orders,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"msg":        "根据订单号获取订单成功",
+		"entitylist": orders,
+	})
 }
 
 // 根据用户id获取订单
@@ -50,11 +80,10 @@ func (srv *OrderService) GetUserOrders(c *gin.Context) {
 
 // 支付宝支付页面使用 支付状态识别和Todo业务 需要post orderId用于订单检索和更新 trade_status是支付宝环境自带的
 func (srv *OrderService) AliPayNotify(c *gin.Context) {
-	var o model.Order
-	o.OrderId = c.PostForm("orderId")
-	tradeStatus := c.PostForm("trade_status")
-
-	orders := srv.Repo.GetOrders(o.OrderId)
+	//var o model.Order
+	orderid := c.PostForm("out_trade_no")
+	tradeStatus := c.PostForm("status")
+	orders := srv.Repo.GetOrders(orderid)
 	if orders == nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
 			"msg": "找不到该订单",
@@ -79,7 +108,7 @@ func (srv *OrderService) AliPayNotify(c *gin.Context) {
 			if err != nil {
 				xlog.Error(err)
 				c.JSON(http.StatusUnprocessableEntity, gin.H{
-					"msg": "订单取消失败！",
+					"msg": "订单更新出错！",
 				})
 				return
 			}
@@ -124,12 +153,18 @@ func (srv *OrderService) AliPayReturn(c *gin.Context) {
 	})
 }
 
-// 创建订单 需要post整个model.order中OrderTemp的属性 按数组形式切片获取
+type entity struct {
+	entitylist []model.OrderTemp `json:"entitylist" binding:"required"`
+}
+
+// 创建订单 需要post整个model.order中OrderTemp的属性 按数组形式获取后切片
 func (srv *OrderService) CreateOrder(c *gin.Context) {
 	var entitylist []model.OrderTemp
-	if err := c.ShouldBind(&entitylist); err != nil {
-		c.JSON(http.StatusOK, gin.H{
+	//if err := c.ShouldBind(&entitylist); err != nil {=
+	if err := c.ShouldBindJSON(&entitylist); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
 			"msg": "获取实体失败，不能生成订单！",
+			"len": len(entitylist),
 		})
 		return
 	}
@@ -142,17 +177,25 @@ func (srv *OrderService) CreateOrder(c *gin.Context) {
 	timeStr := time.Now().Format("2006-01-02 15:04:05") //当前时间的字符串，2006-01-02 15:04:05据说是golang的诞生时间，固定写法
 
 	// 创建订单
+	println(len(entitylist))
 	for _, ot := range entitylist {
 		var on model.Order
 		on.OrderId = outTradeNo
 		on.UserId = ot.UserId
-		on.ProductId = ot.ProductId
-		on.ProductNum = ot.ProductNum
-		on.TotalPrice = ot.TotalPrice
+		on.ProductID = ot.ProductID
+		on.ProductName = ot.ProductName
+		on.ProductCount = ot.ProductCount
+		pricetemp, _ := strconv.ParseFloat(ot.TotalPrice, 64)
+		on.TotalPrice = pricetemp
 		on.Status = 1
 		on.CreateTime = timeStr
-		on.Mobile = ot.Mobile
 		on.UserAddress = ot.UserAddress
+		on.Mobile = ot.Mobile
+		on.Image_Id = ot.Image_Id
+		on.Url = ot.Url
+		on.Value1 = ot.Value1
+		on.Value2 = ot.Value2
+
 		_, err := srv.Repo.Add(on)
 		if err != nil {
 			xlog.Error(err)
@@ -160,7 +203,6 @@ func (srv *OrderService) CreateOrder(c *gin.Context) {
 				"msg":     "订单创建失败！",
 				"orderId": outTradeNo,
 			})
-
 			return
 		}
 	}
@@ -168,16 +210,30 @@ func (srv *OrderService) CreateOrder(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"msg":     "订单创建完成！",
 		"orderId": outTradeNo,
+		"strr":    timeStr,
+		"entity":  entitylist,
 	})
 }
 
-// 支付宝页面设置 订单创建和支付登录界面url创建  post：用户id，总金额，订单id
+type payentity struct {
+	UserId      string `json:"userId" binding:"required"`
+	OrderId     string `json:"orderId" binding:"required"`
+	TotalPrice  string `json:"totalPrice" binding:"required"`
+	Mobile      string `json:"mobile" binding:"required"`
+	UserAddress string `json:"useraddress" binding:"required"`
+}
+
+// 支付宝页面设置 支付登录界面url获取  post：用户id，总金额，订单id
 func (srv *OrderService) Alipay(c *gin.Context) {
-	var o model.Order
-	// 订单号获取 时间戳表示
-	o.OrderId = c.PostForm("orderId")
-	o.UserId = c.PostForm("userID")
-	o.TotalPrice = c.GetInt64("totalPrice")
+	var pe payentity
+	if err := c.ShouldBindJSON(&pe); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"msg": "获取订单信息失败，不能生成订单！",
+			"len": pe,
+		})
+		return
+	}
+
 	//获取url进行支付
 	client, err := alipay.NewClient(config.AppId, config.PrivateKey, config.IsProduction)
 	if err != nil {
@@ -195,12 +251,17 @@ func (srv *OrderService) Alipay(c *gin.Context) {
 
 	bm := make(gopay.BodyMap)
 	// 支付标题 用户名
-	bm.Set("subject", o.UserId)
+	bm.Set("subject", pe.UserId)
 	// 支付账单号
-	bm.Set("out_trade_no", o.OrderId)
+	temp = pe.OrderId
+	bm.Set("out_trade_no", pe.OrderId)
 	// 支付金额
-	bm.Set("total_amount", o.TotalPrice)
+	bm.Set("total_amount", pe.TotalPrice)
 	bm.Set("product_code", config.ProductCode)
+	//设置自定义参数
+	passback_params := "" + pe.Mobile + ";" + pe.UserAddress
+	//将参数encode
+	bm.Set("passback_params", passback_params)
 
 	payUrl, err := client.TradePagePay(context.Background(), bm)
 	if err != nil {
@@ -213,17 +274,36 @@ func (srv *OrderService) Alipay(c *gin.Context) {
 	}
 	//println("temp:" + payUrl)
 	//xlog.Debugf("payUrl", payUrl)
-
 	// 以下为payurl的调整信息 如果payurl为https://openapi.alipaydev.com/gateway.do则将以下内容注释掉 否则endpayurl才是正确的url
-	editpayurl := strings.SplitAfter(payUrl, "/")
-	editpayurl[2] = "openapi.alipaydev.com/"
-
-	endpayurl := strings.Join(editpayurl, "")
+	//editpayurl := strings.SplitAfter(payUrl, "/")
+	//editpayurl[2] = "openapi.alipaydev.com/"
+	//endpayurl := strings.Join(editpayurl, "")
 	//fmt.Println("payurl: " + endpayurl)
+
+	orders := srv.Repo.GetOrders(pe.OrderId)
+	if orders == nil {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
+			"msg": "找不到该订单",
+		})
+		return
+	}
+	//更新订单状态
+	for _, ors := range orders {
+		ors.UserAddress = pe.UserAddress
+		ors.Mobile = pe.Mobile
+		_, err := srv.Repo.Edit(*ors)
+		if err != nil {
+			xlog.Error(err)
+			c.JSON(http.StatusUnprocessableEntity, gin.H{
+				"msg": "订单更新出错！",
+			})
+			return
+		}
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"msg":    "成功生成支付订单",
-		"payUrl": endpayurl,
+		"payUrl": payUrl,
 	})
 }
 
@@ -232,7 +312,7 @@ func (srv *OrderService) CancelOrder(c *gin.Context) {
 	var o model.Order
 	o.OrderId = c.PostForm("orderId")
 
-	orders := srv.Repo.GetUserOrders(o.OrderId)
+	orders := srv.Repo.GetOrdersById(o.OrderId)
 	for _, ors := range orders {
 		ors.Status = 6
 		_, err := srv.Repo.Edit(*ors)
@@ -246,5 +326,33 @@ func (srv *OrderService) CancelOrder(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"msg": "订单取消完成",
+	})
+}
+
+// 用户支付订单后更新订单信息 需要post orderid mobile useraddress
+func (srv *OrderService) FinishOrder(c *gin.Context) {
+	orderId := c.PostForm("orderId")
+	orders := srv.Repo.GetOrders(orderId)
+	if orders == nil {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
+			"msg": "找不到该订单",
+		})
+		return
+	}
+
+	for _, ors := range orders {
+		ors.Status = 2
+		_, err := srv.Repo.Edit(*ors)
+		if err != nil {
+			xlog.Error(err)
+			c.JSON(http.StatusUnprocessableEntity, gin.H{
+				"msg": "订单更新出错！",
+			})
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"msg": "订单支付完成",
 	})
 }

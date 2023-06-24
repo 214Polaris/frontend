@@ -37,9 +37,10 @@ func main() {
 	r.POST("/pay/alipay/notify", OrderSrv.AliPayNotify)
 	r.POST("/api/alipay", OrderSrv.Alipay)
 	r.POST("/api/getuserorders", OrderSrv.GetUserOrders)
+	r.POST("/api/GetOrders", OrderSrv.GetOrders)
 	r.POST("/api/createorder", OrderSrv.CreateOrder)
 	r.POST("/api/cancelorder", OrderSrv.CancelOrder)
-
+	r.POST("/api/finishorder", OrderSrv.FinishOrder)
 	r.POST("/api/Login", UserSrv.Login)
 	r.POST("/api/Register", UserSrv.Register)
 	r.POST("/api/Edit", UserSrv.Edit)

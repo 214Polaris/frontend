@@ -1,22 +1,14 @@
-<script setup></script>
+<script setup>
+const token = localStorage.getItem("token");
+</script>
 
 <template>
-  <div class="Head-container" v-if="token">
+  <div class="Head-container">
     <ul class="head-ul">
-      <li class="head-li">
+      <li class="head-li" v-if="!token">
         <router-link to="/login"><a href="/login">请先登录</a></router-link>
       </li>
-      <li class="head-li">
-        <a href="javascript:">帮助中心</a>
-      </li>
-      <li class="head-li">
-        <a href="javascript:">关于我们</a>
-      </li>
-    </ul>
-  </div>
-  <div class="Head-container" v-else>
-    <ul class="head-ul">
-      <li class="head-li">
+      <li class="head-li" v-else>
         <a href="javascript:"
           ><router-link
             to="/member"
