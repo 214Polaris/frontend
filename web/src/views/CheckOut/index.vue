@@ -117,12 +117,30 @@ const goPay = async () => {
     if (valid) {
       //
       //支付发起的函数写在这里
-      //
-      //下面的删掉
-      ElMessage({
-        message: "支付成功",
-        type: "success",
-      });
+      axios({
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "post",
+    url: "/api/alipay",
+    data: {
+      orderId: orderID,
+      userId:userID,
+      totalPrice:String(totalPrice.value)
+    },
+  })
+    .then((response) => {
+      console.log(response);
+      window.location.href = response.data.payUrl;
+    })
+    .catch(() => {
+      console.log("失败！");
+    });
+      // //下面的删掉
+      // ElMessage({
+      //   message: "支付成功",
+      //   type: "success",
+      // });
     }
   });
 };

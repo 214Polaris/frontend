@@ -181,10 +181,11 @@ function submitPayment() {
   const selectedItems = cartlist.value.filter((item) => item.selected);
   // 计算总价
   let totalprice = calculateTotal();
+  //已选择商品的 cartID
+  let cartIds = selectedItems.map((item) => (item.cartID));
   // const formattedItems = selectedItems.map((item) => {
   //     return {
-  //         productId: item.productID,
-  //         productNum: item.productCount
+  //         cartId: item.cartID,
   //     };
   // });
   //加项目
@@ -207,6 +208,23 @@ function submitPayment() {
       let orderId = response.data.orderId;
       console.log(orderId);
       router.push({ name: "checkout", params: { orderID: orderId } });
+    })
+    .catch((error) => {
+      console.error("Payment error:", error);
+      // Handle error response
+    });
+    console.log(cartIds)
+    //清除购物车的 api
+    axios({
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "post",
+    url: "/api/remove",
+    data: {cartId:cartIds}
+  })
+    .then((response) => {
+      console.log("Payment successful:", response.data);
     })
     .catch((error) => {
       console.error("Payment error:", error);

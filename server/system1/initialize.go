@@ -23,11 +23,11 @@ var (
 const (
 	userName = "root"
 	//password = "Hzm13602985871"
-	//password = "chen8574jun"
-	password = "123456"
-	ip       = "127.0.0.1"
-	port     = "3306"
-	dbName   = "shoppingmall"
+	password = "chen8574jun"
+	//password = "123456"
+	ip     = "127.0.0.1"
+	port   = "3306"
+	dbName = "shoppingmall"
 )
 
 func InitDB() *gorm.DB {

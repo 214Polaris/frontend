@@ -10,6 +10,7 @@ import userOrder from "@/views/member/components/userOrder.vue";
 import Search from "@/views/Search/index.vue";
 import empty from "@/views/Layout/empty.vue";
 import CheckOut from "@/views/CheckOut/index.vue";
+import CheckOutSuccess from "@/views/CheckOut/confirm"
 import { createRouter, createWebHashHistory } from "vue-router";
 
 const routes = [
@@ -69,16 +70,24 @@ const routes = [
         },
         component: cart,
       },
+      //搜索
       {
         path: "search/:prom",
         name: "search",
         component: Search,
       },
+      //结算
       {
         path: "checkout/:orderID",
         name: "checkout",
         component: CheckOut,
       },
+      //结算成功跳转
+      {
+        path: "CheckOutSuccess",
+        name:"CheckOutSuccess",
+        component: CheckOutSuccess
+      }
     ],
   },
   {
