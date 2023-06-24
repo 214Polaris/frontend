@@ -9,6 +9,8 @@ const router = useRouter();
 const one_orderList = ref([]);
 const cancelDialogVisiable = ref(false);
 const userID = localStorage.getItem("userID");
+// const ro = new ResizeObserver();
+// ro.disconnect();
 const tabTypes = [
   { name: "all", label: "全部订单" },
   { name: "unpay", label: "待付款" },
@@ -146,7 +148,6 @@ onMounted(() => {
       <el-table
         :data="selectList(index)"
         style="width: 100%"
-        max-height="500px"
         stripe
         lazy
         v-loading="loading"
@@ -165,6 +166,7 @@ onMounted(() => {
           label="下单商品"
           width="300px"
           cell-style="min-height: 50px"
+          type="index"
         >
           <template #default="scope">
             <router-link
@@ -178,7 +180,7 @@ onMounted(() => {
             >
           </template>
         </el-table-column>
-        ><el-table-column label="选择类型" width="80px">
+        ><el-table-column label="选择类型" width="80px" type="index">
           <template #default="scope">
             <span style="font-size: 12px"
               >{{ scope.row.value1 }} + {{ scope.row.value2 }}</span
@@ -280,7 +282,7 @@ onMounted(() => {
     <el-table
       :data="one_orderList"
       style="width: 80%; margin: auto"
-      max-height="500px"
+      height="500px"
       stripe
       fix
       size="large"
