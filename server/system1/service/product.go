@@ -79,9 +79,7 @@ func (srv *ProductService) SendAll(ctx *gin.Context) {
 		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code": 422, "msg": "获取失败"})
 		return
 	}
-	ctx.JSON(200,
-		products,
-	)
+	ctx.JSON(200, products)
 }
 
 func (srv *ProductService) Search(ctx *gin.Context) {
@@ -95,6 +93,7 @@ func (srv *ProductService) Search(ctx *gin.Context) {
 	//没有找到结果，返回状态码422
 	if len(products) == 0 {
 		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code": 422, "msg": "没有找到该商品"})
+		return
 	}
 	//以下为分页操作
 	//确定要发送的商品的下标
