@@ -2,6 +2,7 @@
   <div class="headText">
     <p>以下是 {{ key }} 的搜索结果 :</p>
   </div>
+  <el-empty description="没有找到相关结果" v-if="no_result" :image-size="300" />
   <div class="total">
     <div class="layer_good">
       <div
@@ -25,21 +26,25 @@
     <el-pagination
       background="true"
       layout="prev, pager, next"
-      :total="50"
+      :total="total_page"
       class="pageSelect"
+      v-model:current-page="current_page"
+      @current-change="onCurrentChange()"
     />
   </div>
 </template>
 
 <script setup>
 import axios from "axios";
+import { ElMessage } from "element-plus";
 import { onMounted, ref, reactive } from "vue";
 import { useRoute } from "vue-router";
-const goodsList = reactive({ products: [], totalPage: [] });
+const goodsList = reactive({ products: [], totalPage: "" });
 const route = useRoute();
 const key = ref(route.params.prom);
 const current_page = ref();
 const total_page = ref();
+const no_result = ref(false);
 
 const getgoodList = () => {
   axios({
@@ -55,11 +60,36 @@ const getgoodList = () => {
   })
     .then((response) => {
       goodsList.products = response.data.products;
-      goddsList.totalPage = response.data.totalPage;
+      goodsList.totalPage = response.data.totalPage;
+      total_page.value = parseInt(goodsList.totalPage) * 10;
+      console.log(total_page);
       console.log(goodsList);
     })
+    .catch(() => {
+      console.log("搜索失败");
+      no_result.value = true;
+    });
+};
+
+const onCurrentChange = () => {
+  axios({
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    method: "post",
+    url: "/api/Search",
+    data: {
+      name: key.value,
+      pageNum: current_page.value,
+    },
+  })
+    .then((response) => {
+      goodsList.products = response.data.products;
+      goodsList.totalPage = response.data.totalPage;
+      total_page.value = parseInt(goodsList.totalPage) * 10;
+    })
     .catch((error) => {
-      console.error(error);
+      console.log("搜索失败");
     });
 };
 

@@ -102,7 +102,7 @@ export default {
         this.$router.push({ path: "/" });
       });
     },
-    //搜索功能（暂不可用）
+    //搜索功能
     search() {
       this.$router.push({ name: "empty", params: { prom: this.searchInput } });
     },
