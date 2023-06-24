@@ -192,14 +192,12 @@ onMounted(() => {
           label="商品数量"
           width="120px"
           align="center"
-          type="index"
         ></el-table-column>
         <el-table-column
           prop="totalPrice"
           label="总价格/元"
           width="100px"
           align="center"
-          type="index"
         ></el-table-column
         ><el-table-column
           prop="createTime"
@@ -212,7 +210,6 @@ onMounted(() => {
           label="订单状态"
           width="150px"
           align="right"
-          type="index"
           v-if="tab.label == '全部订单'"
         >
           <template #default="scope">
@@ -225,7 +222,6 @@ onMounted(() => {
           label="操作"
           width="150px"
           align="right"
-          type="index"
           v-if="tab.label != '全部订单'"
         >
           <template #default="scope">
