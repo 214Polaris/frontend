@@ -20,12 +20,6 @@
         <el-menu-item index="2.3" v-if="token" @click="logout()"
           >退出登录</el-menu-item
         >
-        <el-submenu index="2-4">
-          <template #title>选项4</template>
-          <el-menu-item index="2-4-1">选项1</el-menu-item>
-          <el-menu-item index="2-4-2">选项2</el-menu-item>
-          <el-menu-item index="2-4-3">选项3</el-menu-item>
-        </el-submenu>
       </el-submenu>
       <el-menu-item index="3" disabled>消息中心</el-menu-item>
       <div
@@ -104,7 +98,12 @@ export default {
     },
     //搜索功能
     search() {
-      this.$router.push({ name: "empty", params: { prom: this.searchInput } });
+      if (this.searchInput) {
+        this.$router.push({
+          name: "empty",
+          params: { prom: this.searchInput },
+        });
+      }
     },
     //进入订单页面
     MyOrders() {
