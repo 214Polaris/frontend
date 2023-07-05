@@ -1,5 +1,15 @@
 <script setup>
+import { ElNotification } from "element-plus";
+
 const token = localStorage.getItem("token");
+const info_show = () => {
+  ElNotification({
+    title: "Info",
+    message:
+      "本项目由中山大学软件工程学院21级中级实训21组开发，部分资源来自网络",
+    type: "info",
+  });
+};
 </script>
 
 <template>
@@ -21,7 +31,7 @@ const token = localStorage.getItem("token");
         <a href="javascript:">帮助中心</a>
       </li>
       <li class="head-li">
-        <a href="javascript:">关于我们</a>
+        <a href="javascript:" @click="info_show()">关于我们</a>
       </li>
     </ul>
   </div>

@@ -64,7 +64,6 @@
 
 <style scoped lang="scss">
 .app_footer {
-  
   overflow: hidden;
   background-color: #f5f5f5;
   padding-top: 20px;
@@ -120,7 +119,7 @@
 
       &:hover {
         .iconfont {
-          color: #27ba9b;
+          color: #409eff;
         }
       }
 
@@ -154,7 +153,7 @@
         margin-top: 5px;
         color: #fff;
         border-radius: 2px;
-        background-color: #27ba9b;
+        background-color: #409eff;
       }
     }
 

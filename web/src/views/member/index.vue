@@ -56,12 +56,12 @@
   position: relative;
 }
 .container .xtx-member-aside a:hover {
-  color: #27ba9b;
+  color: #409eff;
 }
 
 .container .xtx-member-aside a.active,
 .container .xtx-member-aside a.router-link-exact-active {
-  color: #27ba9b;
+  color: #409eff;
 }
 .container .xtx-member-aside a.router-link-exact-active:before {
   display: block;
@@ -76,7 +76,7 @@
   position: absolute;
   top: 19px;
   left: -16px;
-  background-color: #27ba9b;
+  background-color: #409eff;
 }
 
 .container .article {
