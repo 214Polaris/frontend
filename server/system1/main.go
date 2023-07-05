@@ -52,6 +52,9 @@ func main() {
 	r.POST("/api/add", CartSrv.Add)
 	r.POST("/api/delete", CartSrv.Delete)
 	r.POST("/api/remove", CartSrv.Remove)
+
+	r.GET("/api/CarouselMap", BannerSrv.GetAll)
+
 	r.Run(":8081")
 	//
 }
